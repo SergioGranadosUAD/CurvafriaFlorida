@@ -33,8 +33,7 @@ public class ProjectileFactory : MonoBehaviour
     {
         GameObject newProjectile = Instantiate(prefab, position, rotation);
         Projectile projectileRef = newProjectile.GetComponent<Projectile>();
-        //IProjectile projectileRef = newProjectile.GetComponent(typeof(IProjectile)) as IProjectile;
-        projectileRef.SetProjectileData(speed, rotation);
+        projectileRef.SetProjectileData(speed, rotation, instanceTag);
         m_projectileList.Add(newProjectile);
 
         return newProjectile;

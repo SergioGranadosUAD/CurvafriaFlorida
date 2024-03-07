@@ -29,13 +29,30 @@ public class IdleState : IState
         }
     }
 
+    private float m_elapsedTime = 0;
+
     public void CheckStateConditions()
     {
-        
+        if(PlayerRef.Dead)
+        {
+            StateController.ChangeState("Death");
+        }
+        if(PlayerRef.Moving)
+        {
+            StateController.ChangeState("Moving");
+        }
     }
 
     public void OnExecuteState()
     {
+        m_elapsedTime += Time.deltaTime;
+
+        if(m_elapsedTime >= PlayerRef.IdleTimer)
+        {
+            PlayerRef.Animator.ResetTrigger("LongWait");
+            PlayerRef.Animator.SetTrigger("LongWait");
+            m_elapsedTime = 0;
+        }
         CheckStateConditions();
     }
 
@@ -46,6 +63,6 @@ public class IdleState : IState
 
     public void OnStateEnter()
     {
-        
+        m_elapsedTime = 0;
     }
 }

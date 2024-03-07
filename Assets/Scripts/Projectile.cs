@@ -42,9 +42,10 @@ public class Projectile : MonoBehaviour
         
     }
 
-    public void SetProjectileData(float speed, Quaternion rotation)
+    public void SetProjectileData(float speed, Quaternion rotation, string tag)
     {
         m_speed = speed;
         transform.rotation = rotation;
+        gameObject.tag = tag;
     }
 }

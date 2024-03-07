@@ -58,7 +58,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf4b995b9085b647a35a4680a4bd47a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 3
+  playerSpeed: 500
+  idleTimer: 15
+  m_projectilePrefab: {fileID: 3516576234044140275, guid: 0b86dde989e0e8b419d8efe05e0c1196, type: 3}
 --- !u!95 &3705757378716674614
 Animator:
   serializedVersion: 5
@@ -207,7 +209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 990590673437619386, guid: 09752acd6a403d546900387e94d62582, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.42
       objectReference: {fileID: 0}
     - target: {fileID: 990590673437619386, guid: 09752acd6a403d546900387e94d62582, type: 3}
       propertyPath: m_LocalPosition.z

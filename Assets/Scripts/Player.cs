@@ -7,19 +7,45 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     //Variable declaration
-    [SerializeField] private float playerSpeed = 1;
+    [SerializeField] private float playerSpeed = 500;
+    [SerializeField] private float idleTimer = 15;
     [SerializeField] GameObject m_projectilePrefab;
-
+    
+    public float PlayerSpeed { get { return playerSpeed; } }
+    public float IdleTimer { get { return idleTimer; } }
     private IA_Player m_playerInputActions;
     private Rigidbody m_rigidBody;
+    public Rigidbody Rigidbody
+    {
+        get
+        {
+            if(m_rigidBody == null)
+            {
+                m_rigidBody = GetComponent<Rigidbody>();
+            }
+            return m_rigidBody;
+        }
+    }
     private Animator m_animator;
+    public Animator Animator
+    {
+        get
+        {
+            if(m_animator == null)
+            {
+                m_animator = GetComponent<Animator>();
+            }
+            return m_animator;
+        }
+    }
     private StateMachine m_stateMachine = new StateMachine();
     private GameObject m_projectileSpawner;
-    public Rigidbody Rigidbody { get { return m_rigidBody; } }
 
     private bool isMoving = false;
     public bool Moving { get { return isMoving; } }
-    private float idleTime = 0;
+    private bool isDead = false;
+    public bool Dead { get { return isDead; } }
+   
 
         public IA_Player IAPlayer
     {
@@ -38,8 +64,6 @@ public class Player : MonoBehaviour
         SetupStateMachine();
 
         Assert.IsNotNull<IA_Player>(IAPlayer);
-        m_rigidBody = transform.GetComponent<Rigidbody>();
-        m_animator = GetComponent<Animator>();
         m_projectileSpawner = transform.Find("ProjectileSpawner").gameObject;
 
         //Subscribe local functions to events managed by Input Actions
@@ -59,56 +83,21 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Move the player if its movement input value is different than zero.
-        Vector2 rawMovementValue = IAPlayer.BasicMovement.Move.ReadValue<Vector2>();
-        if(rawMovementValue != Vector2.zero)
-        {
-            Vector3 relativeDir = Quaternion.Euler(0f, 0f, transform.eulerAngles.y) * rawMovementValue;
-            m_animator.SetFloat("dirX", relativeDir.x);
-            m_animator.SetFloat("dirY", relativeDir.y);
-            Vector3 velocity = new Vector3(rawMovementValue.x, 0f, rawMovementValue.y);
-            m_rigidBody.velocity = velocity * playerSpeed;
-        }
-
-        Vector3 mousePos = IAPlayer.BasicMovement.Aim.ReadValue<Vector2>();
-        Ray ray = Camera.main.ScreenPointToRay(mousePos);
-        Plane ground = new Plane(Vector3.up, Vector3.zero);
-        float rayDistance;
-
-        if(ground.Raycast(ray, out rayDistance))
-        {
-            Vector3 point = ray.GetPoint(rayDistance);
-            point = new Vector3(point.x, transform.position.y, point.z);
-            transform.LookAt(point);
-        }
-
-        if(!isMoving)
-        {
-            idleTime += Time.deltaTime;
-        }
-
-        if(idleTime > 20)
-        {
-            m_animator.ResetTrigger("LongWait");
-            m_animator.SetTrigger("LongWait");
-            idleTime = 0;
-        }
+        HandleAim();
+        m_stateMachine.CurrentState.OnExecuteState();
     }
 
-    //Unused
     public void Move(InputAction.CallbackContext context)
     {
         if(context.phase == InputActionPhase.Started)
         {
-            idleTime = 0;
-            m_animator.SetBool("IsMoving", true);
             isMoving = true;
         }
         else if(context.phase == InputActionPhase.Canceled)
         {
-            m_animator.SetBool("IsMoving", false);
+            
             isMoving = false;
-            Rigidbody.velocity = Vector3.zero;
+            
         }
     }
 
@@ -124,11 +113,26 @@ public class Player : MonoBehaviour
 
     public void Shoot(InputAction.CallbackContext context)
     {
-        ProjectileFactory.Instance.SpawnProjectile(m_projectilePrefab, m_projectileSpawner.transform.position, 3000, transform.rotation, "Player");
+        ProjectileFactory.Instance.SpawnProjectile(m_projectilePrefab, m_projectileSpawner.transform.position, 3000, transform.rotation, "Allied");
     }
 
     public void PickupItem(InputAction.CallbackContext context)
     {
 
+    }
+
+    private void HandleAim()
+    {
+        Vector3 mousePos = IAPlayer.BasicMovement.Aim.ReadValue<Vector2>();
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        Plane ground = new Plane(Vector3.up, Vector3.zero);
+        float rayDistance;
+
+        if (ground.Raycast(ray, out rayDistance))
+        {
+            Vector3 point = ray.GetPoint(rayDistance);
+            point = new Vector3(point.x, transform.position.y, point.z);
+            transform.LookAt(point);
+        }
     }
 }

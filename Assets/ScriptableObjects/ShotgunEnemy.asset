@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 234223ebccbc3f6419b191906bb6eb71, type: 3}
   m_Name: ShotgunEnemy
   m_EditorClassIdentifier: 
-  type: 
+  type: Shotgun
   speed: 0
   detectionRange: 0
   atkSpeed: 0
