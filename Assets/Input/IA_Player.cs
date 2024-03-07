@@ -44,6 +44,24 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""0ead4072-56c8-4c7f-b37e-3eca457d303e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pickup"",
+                    ""type"": ""Button"",
+                    ""id"": ""453594f9-19f7-44d8-ba40-142010fc1bf7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -134,6 +152,50 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16b79f56-2f31-4000-979a-7dc01b104203"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c0315ace-8029-42df-9132-2ac9a720588c"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ec69bfcf-74c1-4e6d-8a57-aa2cd5be5c10"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pickup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e4891b4-fd7f-4e82-be4a-3b6d1522f61f"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pickup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -144,6 +206,8 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_BasicMovement = asset.FindActionMap("BasicMovement", throwIfNotFound: true);
         m_BasicMovement_Move = m_BasicMovement.FindAction("Move", throwIfNotFound: true);
         m_BasicMovement_Aim = m_BasicMovement.FindAction("Aim", throwIfNotFound: true);
+        m_BasicMovement_Shoot = m_BasicMovement.FindAction("Shoot", throwIfNotFound: true);
+        m_BasicMovement_Pickup = m_BasicMovement.FindAction("Pickup", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,12 +271,16 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private List<IBasicMovementActions> m_BasicMovementActionsCallbackInterfaces = new List<IBasicMovementActions>();
     private readonly InputAction m_BasicMovement_Move;
     private readonly InputAction m_BasicMovement_Aim;
+    private readonly InputAction m_BasicMovement_Shoot;
+    private readonly InputAction m_BasicMovement_Pickup;
     public struct BasicMovementActions
     {
         private @IA_Player m_Wrapper;
         public BasicMovementActions(@IA_Player wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_BasicMovement_Move;
         public InputAction @Aim => m_Wrapper.m_BasicMovement_Aim;
+        public InputAction @Shoot => m_Wrapper.m_BasicMovement_Shoot;
+        public InputAction @Pickup => m_Wrapper.m_BasicMovement_Pickup;
         public InputActionMap Get() { return m_Wrapper.m_BasicMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -228,6 +296,12 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
+            @Shoot.started += instance.OnShoot;
+            @Shoot.performed += instance.OnShoot;
+            @Shoot.canceled += instance.OnShoot;
+            @Pickup.started += instance.OnPickup;
+            @Pickup.performed += instance.OnPickup;
+            @Pickup.canceled += instance.OnPickup;
         }
 
         private void UnregisterCallbacks(IBasicMovementActions instance)
@@ -238,6 +312,12 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
+            @Shoot.started -= instance.OnShoot;
+            @Shoot.performed -= instance.OnShoot;
+            @Shoot.canceled -= instance.OnShoot;
+            @Pickup.started -= instance.OnPickup;
+            @Pickup.performed -= instance.OnPickup;
+            @Pickup.canceled -= instance.OnPickup;
         }
 
         public void RemoveCallbacks(IBasicMovementActions instance)
@@ -259,5 +339,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
+        void OnPickup(InputAction.CallbackContext context);
     }
 }
