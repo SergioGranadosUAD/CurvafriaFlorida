@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2545d0377a229149a6b595f4cbf2bb4, type: 3}
   m_Name: Rifle
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
+  weapon: {fileID: 919132149155446097, guid: 498c6948cfcdecb48bd8ce53f9b6a48f, type: 3}
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 0, z: 0}
   barrelPosition: {x: 0, y: 0, z: 0}
   type: 
   rateOfFire: 0
-  detectionRange: 0
-  atkSpeed: 0
+  ammunition: 0
