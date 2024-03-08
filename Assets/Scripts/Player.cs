@@ -9,7 +9,8 @@ public class Player : MonoBehaviour
     //Variable declaration
     [SerializeField] private float playerSpeed = 500;
     [SerializeField] private float idleTimer = 15;
-    [SerializeField] GameObject m_projectilePrefab;
+    [SerializeField] private GameObject weaponPrefab;
+    [SerializeField] private GameObject m_projectilePrefab;
     
     public float PlayerSpeed { get { return playerSpeed; } }
     public float IdleTimer { get { return idleTimer; } }
@@ -64,7 +65,7 @@ public class Player : MonoBehaviour
         SetupStateMachine();
 
         Assert.IsNotNull<IA_Player>(IAPlayer);
-        m_projectileSpawner = transform.Find("ProjectileSpawner").gameObject;
+        //m_projectileSpawner = transform.Find("ProjectileSpawner").gameObject;
 
         //Subscribe local functions to events managed by Input Actions
         IAPlayer.BasicMovement.Enable();
@@ -113,7 +114,7 @@ public class Player : MonoBehaviour
 
     public void Shoot(InputAction.CallbackContext context)
     {
-        ProjectileFactory.Instance.SpawnProjectile(m_projectilePrefab, m_projectileSpawner.transform.position, 3000, transform.rotation, "Allied");
+        ProjectileFactory.Instance.SpawnProjectile(m_projectilePrefab, weaponPrefab.transform.Find("ProjectileSpawner").transform.position, 3000, transform.rotation, "Allied");
     }
 
     public void PickupItem(InputAction.CallbackContext context)

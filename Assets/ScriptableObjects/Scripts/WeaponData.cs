@@ -2,17 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponData : MonoBehaviour
+[CreateAssetMenu(fileName = "New Weapon", menuName = "EntityTypes/Weapons")]
+public class WeaponData : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Tooltip("El modelo del arma.")]
+    public GameObject weapon;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Tooltip("Posición del arma respecto a la mano.")]
+    public Vector3 gripPosition;
+
+    [Tooltip("Rotación del arma respecto a la mano (Ángulos en Euler).")]
+    public Vector3 gripRotation;
+
+    [Tooltip("Posición del cañón del arma (Para instanciar proyectiles).")]
+    public Vector3 barrelPosition;
+
+    [Tooltip("El tipo de arma.")]
+    public string type;
+
+    [Tooltip("La cadencia de disparo del arma.")]
+    [Range(.5f, 3f)]
+    public float rateOfFire;
+
+    [Tooltip("El tamaño del cargador del arma.")]
+    public int ammunition;
 }
