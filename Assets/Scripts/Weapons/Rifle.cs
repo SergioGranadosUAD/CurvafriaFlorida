@@ -5,6 +5,7 @@ using UnityEngine;
 public class Rifle : MonoBehaviour, IWeapon
 {
     GameObject m_weaponRoot;
+    GameObject m_spawnerLocation;
     public GameObject WeaponRoot { get { return m_weaponRoot; } set { m_weaponRoot = value; } }
     GameObject m_projectilePrefab;
     public GameObject ProjectilePrefab { get { return m_projectilePrefab; } set { m_projectilePrefab = value; } }
@@ -16,6 +17,7 @@ public class Rifle : MonoBehaviour, IWeapon
     public int BulletCount { get { return m_bulletCount; } set { m_bulletCount = value; } }
     private float m_shotCooldown = 0;
     private bool m_canShoot = true;
+    private float m_spreadAngle = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +51,10 @@ public class Rifle : MonoBehaviour, IWeapon
         m_weaponRoot.transform.localRotation = Quaternion.Euler(data.gripRotation);
         actualBarrel.transform.localPosition = data.barrelPosition;
 
+        m_spreadAngle = data.spreadAngle;
+
+        m_spawnerLocation = WeaponRoot.transform.Find("ProjectileSpawner").gameObject;
+
         m_shotCooldown =  1 / data.rateOfFire;
     }
 
@@ -56,7 +62,15 @@ public class Rifle : MonoBehaviour, IWeapon
     {
         if(m_canShoot)
         {
-            ProjectileFactory.Instance.SpawnProjectile(ProjectilePrefab, WeaponRoot.transform.Find("ProjectileSpawner").transform.position, 3000, WeaponRoot.transform.rotation, BulletTag);
+            float angleX = WeaponRoot.transform.eulerAngles.x;
+            float angleY = WeaponRoot.transform.eulerAngles.y;
+            float angleZ = WeaponRoot.transform.eulerAngles.z;
+            Quaternion spreadValue = Quaternion.Euler(Random.Range(angleX - m_spreadAngle, angleX + m_spreadAngle),
+                                                      Random.Range(angleY - m_spreadAngle, angleY + m_spreadAngle),
+                                                      Random.Range(angleZ - m_spreadAngle, angleZ + m_spreadAngle));
+
+            ProjectileFactory.Instance.SpawnProjectile(ProjectilePrefab, m_spawnerLocation.transform.position, 3000, spreadValue, BulletTag);
+
             StartCoroutine(WaitForCooldown());
         }
         

@@ -17,5 +17,6 @@ MonoBehaviour:
   gripRotation: {x: 282.7036, y: 21.833641, z: 69.32513}
   barrelPosition: {x: -0.001, y: 0.058, z: 0.111}
   type: Pistol
-  rateOfFire: 0
-  ammunition: 10
+  rateOfFire: 2
+  maxAmmo: 10
+  spreadAngle: 5

@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Rifle
   m_EditorClassIdentifier: 
   weapon: {fileID: 919132149155446097, guid: 498c6948cfcdecb48bd8ce53f9b6a48f, type: 3}
-  gripPosition: {x: 0, y: 0, z: 0}
-  gripRotation: {x: 0, y: 0, z: 0}
-  barrelPosition: {x: 0, y: 0, z: 0}
-  type: 
-  rateOfFire: 0
-  ammunition: 0
+  gripPosition: {x: 0, y: 0.32, z: 0.011}
+  gripRotation: {x: 283.56635, y: 115.88166, z: 346.51117}
+  barrelPosition: {x: -0.001, y: 0.073, z: 0.491}
+  type: Rifle
+  rateOfFire: 4
+  maxAmmo: 30
+  spreadAngle: 5

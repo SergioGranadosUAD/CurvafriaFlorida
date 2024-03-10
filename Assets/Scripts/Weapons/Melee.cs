@@ -5,6 +5,7 @@ using UnityEngine;
 public class Melee : MonoBehaviour, IWeapon
 {
     GameObject m_weaponRoot;
+    GameObject m_spawnerLocation;
     public GameObject WeaponRoot { get { return m_weaponRoot; } set { m_weaponRoot = value; } }
     GameObject m_projectilePrefab;
     public GameObject ProjectilePrefab { get { return m_projectilePrefab; } set { m_projectilePrefab = value; } }
@@ -15,6 +16,8 @@ public class Melee : MonoBehaviour, IWeapon
     int m_bulletCount;
     public int BulletCount { get { return m_bulletCount; } set { m_bulletCount = value; } }
     private float m_shotCooldown = 0;
+    private bool m_canShoot = true;
+    private float m_spreadAngle = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -48,10 +51,33 @@ public class Melee : MonoBehaviour, IWeapon
         m_weaponRoot.transform.localPosition = data.gripPosition;
         m_weaponRoot.transform.localRotation = Quaternion.Euler(data.gripRotation);
         actualBarrel.transform.localPosition = data.barrelPosition;
+
+        m_spreadAngle = data.spreadAngle;
+
+        m_spawnerLocation = WeaponRoot.transform.Find("ProjectileSpawner").gameObject;
+
+        m_shotCooldown = 1 / data.rateOfFire;
     }
 
     public void Attack()
     {
-        ProjectileFactory.Instance.SpawnProjectile(ProjectilePrefab, WeaponRoot.transform.Find("ProjectileSpawner").transform.position, 3000, WeaponRoot.transform.rotation, BulletTag);
+        if (m_canShoot)
+        {
+            //ProjectileFactory.Instance.SpawnProjectile(ProjectilePrefab, m_spawnerLocation.transform.position, 3000, spreadValue, BulletTag);
+            StartCoroutine(WaitForCooldown());
+        }
+
+    }
+
+    private IEnumerator WaitForCooldown()
+    {
+        m_canShoot = false;
+        float currentCooldown = 0;
+        while (currentCooldown <= m_shotCooldown)
+        {
+            currentCooldown += Time.deltaTime;
+            yield return null;
+        }
+        m_canShoot = true;
     }
 }

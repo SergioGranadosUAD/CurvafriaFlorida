@@ -17,6 +17,6 @@ MonoBehaviour:
   gripRotation: {x: 0, y: 0, z: 0}
   barrelPosition: {x: 0, y: 0, z: 0}
   type: 
-  rateOfFire: 0
-  detectionRange: 0
-  atkSpeed: 0
+  rateOfFire: 1
+  maxAmmo: 0
+  spreadAngle: 0

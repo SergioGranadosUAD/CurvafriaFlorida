@@ -45,4 +45,16 @@ public class ProjectileFactory : MonoBehaviour
     {
         m_projectileList.Remove(projectile);
     }
+
+    public void ClearProjectileList()
+    {
+        if (m_projectileList.Count > 0)
+        {
+            foreach (GameObject projectile in m_projectileList)
+            {
+                Destroy(projectile);
+            }
+            m_projectileList.Clear();
+        }
+    }
 }

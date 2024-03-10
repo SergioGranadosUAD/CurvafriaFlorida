@@ -17,5 +17,6 @@ MonoBehaviour:
   gripRotation: {x: 283.56635, y: 115.88166, z: 346.51117}
   barrelPosition: {x: -0.001, y: 0.128, z: 0.596}
   type: Shotgun
-  rateOfFire: 0
-  ammunition: 5
+  rateOfFire: 0.5
+  maxAmmo: 5
+  spreadAngle: 15

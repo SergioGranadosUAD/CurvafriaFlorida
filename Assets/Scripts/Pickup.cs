@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
+    public delegate void OnPickupDestroyed(GameObject pickup);
+    public event OnPickupDestroyed onPickupDestroyed;
+
     [SerializeField] private WeaponData m_weaponData;
     public WeaponData WeaponData
     {
@@ -18,7 +21,7 @@ public class Pickup : MonoBehaviour
     {
         if(m_weaponObject == null)
         {
-            SetWeaponType(m_weaponData);
+            SetPickupType(m_weaponData);
         }
     }
 
@@ -52,7 +55,7 @@ public class Pickup : MonoBehaviour
         }
     }
 
-    public void SetWeaponType(WeaponData data)
+    public void SetPickupType(WeaponData data)
     {
         m_weaponData = data;
 
@@ -64,5 +67,10 @@ public class Pickup : MonoBehaviour
         //m_weaponOutline = GameObject.Instantiate(weapon);
         //m_weaponObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
         //m_weaponOutline.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+    }
+
+    private void OnDestroy()
+    {
+        onPickupDestroyed.Invoke(gameObject);
     }
 }

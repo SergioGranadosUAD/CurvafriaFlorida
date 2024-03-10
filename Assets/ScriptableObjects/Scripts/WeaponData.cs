@@ -21,9 +21,13 @@ public class WeaponData : ScriptableObject
     public string type;
 
     [Tooltip("La cadencia de disparo del arma.")]
-    [Range(.5f, 3f)]
+    [Range(.2f, 10f)]
     public float rateOfFire;
 
     [Tooltip("El tamaño del cargador del arma.")]
     public int maxAmmo;
+
+    [Tooltip("Ángulo de desviación de la bala (Más/menos).")]
+    [Range(0f, 20f)]
+    public float spreadAngle;
 }
