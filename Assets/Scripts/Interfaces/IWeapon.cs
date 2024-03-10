@@ -4,6 +4,11 @@ using UnityEngine;
 
 public interface IWeapon
 {
-    void SetWeaponData(GameObject weapon, Vector3 handlePos, Vector3 handleRot, Vector3 barrelPos, string type, float rof, int ammo);
+    public GameObject WeaponRoot { get; set; }
+    public GameObject ProjectilePrefab { get; set; }
+    public Quaternion RotationAngle { get; set; } 
+    public string BulletTag {  get; set; }
+    public int BulletCount { get; set; }
+    void SetWeaponData(WeaponData data);
     void Attack();
 }

@@ -25,5 +25,5 @@ public class WeaponData : ScriptableObject
     public float rateOfFire;
 
     [Tooltip("El tamaño del cargador del arma.")]
-    public int ammunition;
+    public int maxAmmo;
 }

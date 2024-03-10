@@ -36,6 +36,13 @@ public class ProjectileFactory : MonoBehaviour
         projectileRef.SetProjectileData(speed, rotation, instanceTag);
         m_projectileList.Add(newProjectile);
 
+        projectileRef.onProjectileDestroyed += RemoveProjectileFromList;
+
         return newProjectile;
+    }
+
+    private void RemoveProjectileFromList(GameObject projectile)
+    {
+        m_projectileList.Remove(projectile);
     }
 }

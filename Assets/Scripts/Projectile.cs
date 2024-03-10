@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    public delegate void OnProjectileDestroyed(GameObject projectile);
+    public event OnProjectileDestroyed onProjectileDestroyed;
+   
+
     private float m_speed = 2f;
     private Rigidbody m_rigidBody;
     private MeshRenderer m_renderer;
@@ -33,13 +38,26 @@ public class Projectile : MonoBehaviour
                 GameObject.Destroy(gameObject);
             }
         }
-
-        
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+        if(transform.CompareTag("Allied") && collision.transform.CompareTag("Enemy"))
+        {
+            //Enemy enemyRef = collision.transform.GetComponent<Enemy>();
+            //enemyRef.DamageEnemy();
+            GameObject.Destroy(gameObject);
+        }
+        else if (transform.CompareTag("Hostile") && collision.transform.CompareTag("Player"))
+        {
+            Player playerRef = collision.transform.GetComponent<Player>();
+            playerRef.DamagePlayer();
+            GameObject.Destroy(gameObject);
+        }
+        else if(collision.transform.CompareTag("Scenario"))
+        {
+            GameObject.Destroy(gameObject);
+        }
     }
 
     public void SetProjectileData(float speed, Quaternion rotation, string tag)
@@ -47,5 +65,10 @@ public class Projectile : MonoBehaviour
         m_speed = speed;
         transform.rotation = rotation;
         gameObject.tag = tag;
+    }
+
+    private void OnDestroy()
+    {
+        onProjectileDestroyed.Invoke(gameObject);
     }
 }

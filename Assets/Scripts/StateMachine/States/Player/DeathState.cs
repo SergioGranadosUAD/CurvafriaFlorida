@@ -46,6 +46,7 @@ public class DeathState : IState
 
     public void OnStateEnter()
     {
-
+        PlayerRef.IAPlayer.Disable();
+        PlayerRef.Rigidbody.detectCollisions = false;
     }
 }
