@@ -9,6 +9,6 @@ public interface IWeapon
     public Quaternion RotationAngle { get; set; } 
     public string BulletTag {  get; set; }
     public int BulletCount { get; set; }
-    void SetWeaponData(WeaponData data);
+    void SetWeaponData(WeaponData data, int currentAmmo);
     void Attack();
 }

@@ -31,7 +31,7 @@ public class Melee : MonoBehaviour, IWeapon
         
     }
 
-    public void SetWeaponData(WeaponData data)
+    public void SetWeaponData(WeaponData data, int currentAmmo)
     {
         GameObject actualMesh = m_weaponRoot.transform.Find("WeaponMesh").gameObject;
         GameObject actualBarrel = m_weaponRoot.transform.Find("ProjectileSpawner").gameObject;
@@ -53,10 +53,9 @@ public class Melee : MonoBehaviour, IWeapon
         actualBarrel.transform.localPosition = data.barrelPosition;
 
         m_spreadAngle = data.spreadAngle;
-
         m_spawnerLocation = WeaponRoot.transform.Find("ProjectileSpawner").gameObject;
-
         m_shotCooldown = 1 / data.rateOfFire;
+        m_bulletCount = currentAmmo;
     }
 
     public void Attack()

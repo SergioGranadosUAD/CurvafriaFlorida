@@ -89,7 +89,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SwitchWeapon(m_defaultWeapon);
+        SwitchWeapon(m_defaultWeapon, m_defaultWeapon.maxAmmo);
     }
 
     // Update is called once per frame
@@ -158,13 +158,13 @@ public class Player : MonoBehaviour
             }
 
             Pickup weaponRef = closestObject.GetComponent<Pickup>();
-            SwitchWeapon(weaponRef.WeaponData);
+            SwitchWeapon(weaponRef.WeaponData, weaponRef.CurrentAmmo);
             m_pickupsNearby.Remove(closestObject);
             GameObject.Destroy(closestObject);
         }
     }
 
-    private void SwitchWeapon(WeaponData weaponData)
+    private void SwitchWeapon(WeaponData weaponData, int currentAmmo)
     {
         if (m_currentWeapon != null)
         {
@@ -196,7 +196,7 @@ public class Player : MonoBehaviour
         m_currentWeapon.WeaponRoot = weaponPrefab;
         m_currentWeapon.RotationAngle = transform.rotation;
         m_currentWeapon.BulletTag = "Allied";
-        m_currentWeapon.SetWeaponData(weaponData);
+        m_currentWeapon.SetWeaponData(weaponData, currentAmmo);
     }
 
     private void HandleAim()

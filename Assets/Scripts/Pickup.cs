@@ -16,6 +16,7 @@ public class Pickup : MonoBehaviour
     private GameObject m_weaponObject;
     private GameObject m_weaponOutline;
     private int currentAmmo;
+    public int CurrentAmmo { get { return currentAmmo; } }
     // Start is called before the first frame update
     void Start()
     {

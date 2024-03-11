@@ -30,7 +30,7 @@ public class Shotgun : MonoBehaviour, IWeapon
         
     }
 
-    public void SetWeaponData(WeaponData data)
+    public void SetWeaponData(WeaponData data, int currentAmmo)
     {
         GameObject actualMesh = m_weaponRoot.transform.Find("WeaponMesh").gameObject;
         GameObject actualBarrel = m_weaponRoot.transform.Find("ProjectileSpawner").gameObject;
@@ -52,15 +52,14 @@ public class Shotgun : MonoBehaviour, IWeapon
         actualBarrel.transform.localPosition = data.barrelPosition;
 
         m_spreadAngle = data.spreadAngle;
-
         m_spawnerLocation = WeaponRoot.transform.Find("ProjectileSpawner").gameObject;
-
         m_shotCooldown = 1 / data.rateOfFire;
+        m_bulletCount = currentAmmo;
     }
 
     public void Attack()
     {
-        if (m_canShoot)
+        if (m_canShoot && m_bulletCount > 0)
         {
             float angleX = WeaponRoot.transform.eulerAngles.x;
             float angleY = WeaponRoot.transform.eulerAngles.y;
@@ -73,6 +72,7 @@ public class Shotgun : MonoBehaviour, IWeapon
                                                           Random.Range(angleZ - m_spreadAngle, angleZ + m_spreadAngle));
                 ProjectileFactory.Instance.SpawnProjectile(ProjectilePrefab, m_spawnerLocation.transform.position, 3000, spreadValue, BulletTag);
             }
+            m_bulletCount--;
 
             StartCoroutine(WaitForCooldown());
         }
