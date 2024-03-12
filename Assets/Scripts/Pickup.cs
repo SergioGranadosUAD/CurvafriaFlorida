@@ -15,8 +15,8 @@ public class Pickup : MonoBehaviour
 
     private GameObject m_weaponObject;
     private GameObject m_weaponOutline;
-    private int currentAmmo;
-    public int CurrentAmmo { get { return currentAmmo; } }
+    private int m_currentAmmo;
+    public int CurrentAmmo { get { return m_currentAmmo; } }
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +59,7 @@ public class Pickup : MonoBehaviour
     public void SetPickupType(WeaponData data)
     {
         m_weaponData = data;
+        m_currentAmmo = m_weaponData.maxAmmo;
 
         m_weaponObject = GameObject.Instantiate(data.weapon);
         m_weaponObject.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);

@@ -71,8 +71,9 @@ public class Pistol : MonoBehaviour, IWeapon
 
             ProjectileFactory.Instance.SpawnProjectile(ProjectilePrefab, m_spawnerLocation.transform.position, 3000, spreadValue, BulletTag);
             StartCoroutine(WaitForCooldown());
+            m_bulletCount--;
         }
-        m_bulletCount--;
+        
 
     }
 

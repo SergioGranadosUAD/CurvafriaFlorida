@@ -134,6 +134,8 @@ public class Player : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             m_isShooting = true;
+            Animator.ResetTrigger("MeleeAttack");
+            Animator.SetTrigger("MeleeAttack");
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
@@ -166,6 +168,7 @@ public class Player : MonoBehaviour
 
     private void SwitchWeapon(WeaponData weaponData, int currentAmmo)
     {
+        Debug.Log("Weapon loaded with: " + currentAmmo);
         if (m_currentWeapon != null)
         {
             Destroy(m_currentWeapon as Component);
@@ -173,7 +176,7 @@ public class Player : MonoBehaviour
 
         if (weaponData.type.Equals("Melee"))
         {
-            Animator.SetInteger("WeaponEquipped", -1);
+            Animator.SetInteger("WeaponEquipped", 2);
             m_currentWeapon = transform.AddComponent<Melee>() as IWeapon;
         }
         else if(weaponData.type.Equals("Pistol"))
