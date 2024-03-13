@@ -20,6 +20,21 @@ public class GameManager : MonoBehaviour
     }
     
     private GameObject m_player;
+    private Player m_playerRef;
+    public Player Player { 
+        get 
+        {
+            if (m_player == null)
+            {
+                m_player = GameObject.Find("Player");
+                m_playerRef = m_player.GetComponent<Player>();
+            }
+            return m_playerRef; 
+        } 
+    }
+
+    private StateMachine m_stateMachine = new StateMachine();
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -29,10 +44,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
 
-        if(m_player == null)
-        {
-            m_player = GameObject.Find("Player");
-        }
     }
 
     // Update is called once per frame
@@ -41,8 +52,14 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public GameObject GetPlayer()
+    private void SetupStateMachine()
     {
-        return m_player;
+        m_stateMachine.Owner = gameObject;
+        //m_stateMachine.AddState(new AI_IdleState(), "MainMenu");
+        //m_stateMachine.AddState(new AI_PatrolState(), "SetupLevel");
+        //m_stateMachine.AddState(new AI_ChaseState(), "Gameplay");
+        //m_stateMachine.AddState(new AI_DeathState(), Patrol");
+
+        m_stateMachine.ChangeState("Setup");
     }
 }

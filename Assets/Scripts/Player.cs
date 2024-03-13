@@ -43,14 +43,16 @@ public class Player : MonoBehaviour
         }
     }
     private StateMachine m_stateMachine = new StateMachine();
-    private GameObject m_projectileSpawner;
 
     private bool isMoving = false;
     public bool Moving { get { return isMoving; } }
     private bool isDead = false;
     public bool Dead { get { return isDead; } }
-    private bool godMode = true;
+    private bool godMode = false;
     public bool GodMode { get { return godMode; } set { godMode = value; } }
+    private bool isTargetable = true;
+    public bool Targetable { get { return isTargetable; } set { isTargetable = value; } }
+
     private bool m_isShooting = false;
    
 

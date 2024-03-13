@@ -40,12 +40,12 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         if(transform.CompareTag("Allied") && collision.transform.CompareTag("Enemy"))
         {
-            //Enemy enemyRef = collision.transform.GetComponent<Enemy>();
-            //enemyRef.DamageEnemy();
+            Enemy enemyRef = collision.transform.GetComponent<Enemy>();
+            enemyRef.DamageEnemy();
             GameObject.Destroy(gameObject);
         }
         else if (transform.CompareTag("Hostile") && collision.transform.CompareTag("Player"))
