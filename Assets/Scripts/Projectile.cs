@@ -54,7 +54,7 @@ public class Projectile : MonoBehaviour
             playerRef.DamagePlayer();
             GameObject.Destroy(gameObject);
         }
-        else if(collision.transform.CompareTag("Scenario"))
+        else if(collision.transform.CompareTag("Ground"))
         {
             GameObject.Destroy(gameObject);
         }

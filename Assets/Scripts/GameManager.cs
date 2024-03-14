@@ -32,6 +32,20 @@ public class GameManager : MonoBehaviour
             return m_playerRef; 
         } 
     }
+    private GameObject m_camera;
+    private CameraFollow m_cameraRef;
+    public CameraFollow Camera
+    {
+        get
+        {
+            if (m_cameraRef == null)
+            {
+                m_camera = GameObject.Find("Virtual Camera");
+                m_cameraRef = m_camera.GetComponent<CameraFollow>();
+            }
+            return m_cameraRef;
+        }
+    }
 
     private StateMachine m_stateMachine = new StateMachine();
 

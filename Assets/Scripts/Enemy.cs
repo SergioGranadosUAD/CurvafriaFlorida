@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class Enemy : MonoBehaviour
     public string Type { get { return m_type; } }
     private float m_speed;
     public float Speed {  get { return m_speed; } }
-    private float m_detectionRange;
+    private float m_detectionRange = 10;
     public float DetectionRange {  get { return m_detectionRange; } }
 
     private bool isMoving = false;
@@ -55,6 +56,20 @@ public class Enemy : MonoBehaviour
             return m_animator;
         }
     }
+    private NavMeshAgent m_navAgent;
+    public NavMeshAgent NavAgent
+    {
+        get
+        {
+            if(m_navAgent == null)
+            {
+                m_navAgent = GetComponent<NavMeshAgent>();
+            }
+            return m_navAgent;
+        }
+    }
+    private IWeapon m_currentWeapon;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,17 +90,50 @@ public class Enemy : MonoBehaviour
     public void SetEnemyData(EnemyData data)
     {
         m_type = data.type;
-        m_speed = data.speed;
+        NavAgent.speed = data.speed;
         m_detectionRange = data.detectionRange;
+    }
+
+    public void SetWeaponData(WeaponData weaponData)
+    {
+        if (m_currentWeapon != null)
+        {
+            Destroy(m_currentWeapon as Component);
+        }
+
+        if (weaponData.type.Equals("Melee"))
+        {
+            m_currentWeapon = transform.AddComponent<Melee>() as IWeapon;
+        }
+        else if (weaponData.type.Equals("Pistol"))
+        {
+            m_currentWeapon = transform.AddComponent<Pistol>() as IWeapon;
+        }
+        else if (weaponData.type.Equals("Rifle"))
+        {
+            m_currentWeapon = transform.AddComponent<Rifle>() as IWeapon;
+        }
+        else if (weaponData.type.Equals("Shotgun"))
+        {
+            m_currentWeapon = transform.AddComponent<Shotgun>() as IWeapon;
+        }
+
+        m_currentWeapon.ProjectilePrefab = m_projectilePrefab;
+        m_currentWeapon.WeaponRoot = weaponPrefab;
+        m_currentWeapon.RotationAngle = transform.rotation;
+        m_currentWeapon.BulletTag = "Enemy";
+        m_currentWeapon.SetWeaponData(weaponData, weaponData.maxAmmo);
     }
 
     private void CheckPlayerDistance()
     {
         Vector3 playerPos = GameManager.Instance.Player.transform.position;
+        playerPos = new Vector3(playerPos.x, playerPos.y + 1, playerPos.z);
         if (Vector3.Distance(transform.position, playerPos) <= m_detectionRange)
         {
             RaycastHit hit;
-            if (Physics.Linecast(transform.position, playerPos, out hit))
+            Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+            if (Physics.Linecast(enemyPos, playerPos, out hit))
             {
                 if(hit.transform.CompareTag("Player"))
                 {

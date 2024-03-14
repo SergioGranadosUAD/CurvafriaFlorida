@@ -48,7 +48,7 @@ public class AI_PatrolState : IState
     {
         if(Vector3.Distance(EnemyRef.Position, m_patrolNodes[m_currentNode]) > 0)
         {
-            EnemyRef.Rigidbody.velocity = Vector3.MoveTowards(EnemyRef.Position, m_patrolNodes[m_currentNode], Time.deltaTime * EnemyRef.Speed);
+            EnemyRef.NavAgent.destination = m_patrolNodes[m_currentNode];
         }else
         {
             m_currentNode++;

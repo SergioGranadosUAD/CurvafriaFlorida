@@ -8,11 +8,13 @@ TagManager:
   - Managers
   - Allied
   - Hostile
+  - Pickup
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Enemy
   - Water
   - UI
   - 

@@ -13,7 +13,7 @@ public class EnemyFactory : MonoBehaviour
             if (m_instance == null)
             {
                 GameObject gameObject = new GameObject();
-                gameObject.name = "Projectile Factory";
+                gameObject.name = "Enemy Factory";
                 m_instance = gameObject.AddComponent<EnemyFactory>();
             }
             return m_instance;
@@ -29,17 +29,17 @@ public class EnemyFactory : MonoBehaviour
         }
     }
 
-    public GameObject SpawnEnemy(GameObject prefab, Vector3 position, float speed, Quaternion rotation, string instanceTag)
+    public GameObject SpawnEnemy(GameObject prefab, Vector3 position, EnemyData enemyData, WeaponData weaponData)
     {
-        //GameObject newProjectile = Instantiate(prefab, position, rotation);
-        //Projectile projectileRef = newProjectile.GetComponent<Projectile>();
-        //projectileRef.SetProjectileData(speed, rotation, instanceTag);
-        //m_projectileList.Add(newProjectile);
-        //
-        //projectileRef.onProjectileDestroyed += RemoveProjectileFromList;
-        //
-        //return newProjectile;
-        return new GameObject();
+        GameObject newEnemy = Instantiate(prefab, position, Quaternion.identity);
+        Enemy enemyRef = newEnemy.GetComponent<Enemy>();
+        enemyRef.SetEnemyData(enemyData);
+        enemyRef.SetWeaponData(weaponData);
+        m_enemyList.Add(newEnemy);
+        
+        //projectileRef.onEnemyKilled += RemoveEnemyFromList;
+        
+        return newEnemy;
     }
 
     private void RemoveEnemyFromList(GameObject enemy)

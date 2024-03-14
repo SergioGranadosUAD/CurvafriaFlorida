@@ -15,6 +15,8 @@ public class Pistol : MonoBehaviour, IWeapon
     public string BulletTag { get { return m_bulletTag; } set { m_bulletTag = value; } }
     int m_bulletCount;
     public int BulletCount { get { return m_bulletCount; } set { m_bulletCount = value; } }
+    private bool m_bottomlessClip;
+    public bool BottomlessClip { get { return m_bottomlessClip; } set { m_bottomlessClip = value; } }
     private float m_shotCooldown = 0;
     private bool m_canShoot = true;
     private float m_spreadAngle = 0;
@@ -70,8 +72,11 @@ public class Pistol : MonoBehaviour, IWeapon
                                                       Random.Range(angleZ - m_spreadAngle, angleZ + m_spreadAngle));
 
             ProjectileFactory.Instance.SpawnProjectile(ProjectilePrefab, m_spawnerLocation.transform.position, 3000, spreadValue, BulletTag);
+            if (!BottomlessClip)
+            {
+                m_bulletCount--;
+            }
             StartCoroutine(WaitForCooldown());
-            m_bulletCount--;
         }
         
 

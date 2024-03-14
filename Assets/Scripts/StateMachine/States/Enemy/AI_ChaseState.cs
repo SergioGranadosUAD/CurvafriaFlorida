@@ -41,7 +41,7 @@ public class AI_ChaseState : IState
 
     public void OnExecuteState()
     {
-        
+        EnemyRef.NavAgent.destination = GameManager.Instance.Player.transform.position;
         CheckStateConditions();
     }
 
