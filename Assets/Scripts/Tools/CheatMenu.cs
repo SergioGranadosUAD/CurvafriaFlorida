@@ -105,7 +105,7 @@ public class CheatMenu : EditorWindow
 
     private void RestartLevel()
     {
-
+        GameManager.Instance.RestartLevel = true;
     }
 
     private void SetInspectorValues()

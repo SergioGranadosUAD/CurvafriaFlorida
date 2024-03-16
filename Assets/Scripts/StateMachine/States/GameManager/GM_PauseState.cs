@@ -43,11 +43,11 @@ public class GM_PauseState : IState
 
     public void OnExitState()
     {
-
+        Time.timeScale = 1.0f;
     }
 
     public void OnStateEnter()
     {
-        
+        Time.timeScale = 0f;
     }
 }

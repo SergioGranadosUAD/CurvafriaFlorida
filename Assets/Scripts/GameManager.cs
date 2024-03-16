@@ -62,9 +62,14 @@ public class GameManager : MonoBehaviour
             return m_winArea;
         }
     }
-
+    private int m_currentLevelIndex = 0;
+    public int LevelIndex {  get {  return m_currentLevelIndex; } set { m_currentLevelIndex = value; } }
     private bool m_isPaused = false;
     public bool Paused { get {  return m_isPaused; } set { m_isPaused = value; } }
+    private bool m_levelFinished = false;
+    public bool LevelFinished { get { return m_levelFinished; } set { m_levelFinished = value; } }
+    private bool m_restartLevel = false;
+    public bool RestartLevel {  get { return m_restartLevel; } set { m_restartLevel = value; } }
 
     private StateMachine m_stateMachine = new StateMachine();
 

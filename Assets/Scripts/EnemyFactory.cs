@@ -59,4 +59,9 @@ public class EnemyFactory : MonoBehaviour
         }
         
     }
+
+    public int GetEnemyCount()
+    {
+        return m_enemyList.Count;
+    }
 }

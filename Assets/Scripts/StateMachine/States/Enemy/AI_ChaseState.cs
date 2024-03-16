@@ -124,17 +124,15 @@ public class AI_ChaseState : IState
 
         if(Vector3.Distance(playerPos, EnemyRef.transform.position) <= EnemyRef.AttackRange)
         {
-            return true;
-        }
-
-        playerPos = new Vector3(playerPos.x, playerPos.y + 1, playerPos.z);
-        Vector3 enemyPos = new Vector3(EnemyRef.transform.position.x, EnemyRef.transform.position.y + 1, EnemyRef.transform.position.z);
-        RaycastHit hit;
-        if (Physics.Linecast(enemyPos, playerPos, out hit))
-        {
-            if (hit.transform.CompareTag("Player"))
+            playerPos = new Vector3(playerPos.x, playerPos.y + 1, playerPos.z);
+            Vector3 enemyPos = new Vector3(EnemyRef.transform.position.x, EnemyRef.transform.position.y + 1, EnemyRef.transform.position.z);
+            RaycastHit hit;
+            if (Physics.Linecast(enemyPos, playerPos, out hit))
             {
-                return true;
+                if (hit.transform.CompareTag("Player"))
+                {
+                    return true;
+                }
             }
         }
         return false;

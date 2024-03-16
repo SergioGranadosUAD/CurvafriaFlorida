@@ -28,11 +28,14 @@ public class GM_SetupState : IState
             return m_gameManagerRef;
         }
     }
-
+    private bool m_loaded = false;
 
     public void CheckStateConditions()
     {
-
+        if(m_loaded)
+        {
+            StateController.ChangeState("Gameplay");
+        }
     }
 
     public void OnExecuteState()
@@ -48,6 +51,7 @@ public class GM_SetupState : IState
 
     public void OnStateEnter()
     {
-        
+        GameManagerRef.WinArea.SetActive(false);
+        m_loaded = true;
     }
 }

@@ -32,12 +32,30 @@ public class GM_GameplayState : IState
 
     public void CheckStateConditions()
     {
-
+        if(GameManagerRef.RestartLevel)
+        {
+            StateController.ChangeState("LoadLevel");
+        }
+        if(GameManagerRef.Paused)
+        {
+            StateController.ChangeState("Pause");
+        }
+        if(GameManagerRef.LevelFinished)
+        {
+            Debug.Log("Level finished");
+            //StateController.ChangeState("LoadLevel");
+        }
     }
 
     public void OnExecuteState()
     {
-
+        if(EnemyFactory.Instance.GetEnemyCount() == 0) 
+        {
+            if(!GameManagerRef.WinArea.activeSelf)
+            {
+                GameManagerRef.WinArea.SetActive(true);
+            }
+        }
         CheckStateConditions();
     }
 
