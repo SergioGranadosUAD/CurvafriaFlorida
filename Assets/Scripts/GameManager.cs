@@ -69,10 +69,10 @@ public class GameManager : MonoBehaviour
     private void SetupStateMachine()
     {
         m_stateMachine.Owner = gameObject;
-        //m_stateMachine.AddState(new AI_IdleState(), "MainMenu");
-        //m_stateMachine.AddState(new AI_PatrolState(), "SetupLevel");
-        //m_stateMachine.AddState(new AI_ChaseState(), "Gameplay");
-        //m_stateMachine.AddState(new AI_DeathState(), Patrol");
+        //m_stateMachine.AddState(new GM_PauseState(), "Pause");
+        //m_stateMachine.AddState(new GM_SetupState(), "SetupLevel");
+        //m_stateMachine.AddState(new GM_GameplayState(), "Gameplay");
+        //m_stateMachine.AddState(new GM_GameOverState(), GameOver");
 
         m_stateMachine.ChangeState("Setup");
     }

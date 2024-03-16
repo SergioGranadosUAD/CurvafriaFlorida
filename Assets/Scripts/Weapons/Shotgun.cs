@@ -7,8 +7,6 @@ public class Shotgun : MonoBehaviour, IWeapon
     GameObject m_weaponRoot;
     GameObject m_spawnerLocation;
     public GameObject WeaponRoot { get { return m_weaponRoot; } set { m_weaponRoot = value; } }
-    GameObject m_projectilePrefab;
-    public GameObject ProjectilePrefab { get { return m_projectilePrefab; } set { m_projectilePrefab = value; } }
     Quaternion m_bulletRotation;
     public Quaternion RotationAngle { get { return m_bulletRotation; } set { m_bulletRotation = value; } }
     string m_bulletTag;
@@ -20,17 +18,6 @@ public class Shotgun : MonoBehaviour, IWeapon
     private float m_shotCooldown = 0;
     private bool m_canShoot = true;
     private float m_spreadAngle = 0;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void SetWeaponData(WeaponData data, int currentAmmo)
     {
@@ -59,7 +46,7 @@ public class Shotgun : MonoBehaviour, IWeapon
         m_bulletCount = currentAmmo;
     }
 
-    public void Attack()
+    public bool Attack()
     {
         if (m_canShoot && m_bulletCount > 0)
         {
@@ -72,15 +59,16 @@ public class Shotgun : MonoBehaviour, IWeapon
                 Quaternion spreadValue = Quaternion.Euler(Random.Range(angleX - m_spreadAngle, angleX + m_spreadAngle),
                                                           Random.Range(angleY - m_spreadAngle, angleY + m_spreadAngle),
                                                           Random.Range(angleZ - m_spreadAngle, angleZ + m_spreadAngle));
-                ProjectileFactory.Instance.SpawnProjectile(ProjectilePrefab, m_spawnerLocation.transform.position, 3000, spreadValue, BulletTag);
+                ProjectileFactory.Instance.SpawnProjectile(m_spawnerLocation.transform.position, 3000, spreadValue, BulletTag);
             }
             if(!BottomlessClip)
             {
                 m_bulletCount--;
             }
             StartCoroutine(WaitForCooldown());
+            return true;
         }
-
+        return false;
     }
 
     private IEnumerator WaitForCooldown()

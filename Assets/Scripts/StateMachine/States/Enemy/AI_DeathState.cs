@@ -37,17 +37,18 @@ public class AI_DeathState : IState
 
     public void OnExecuteState()
     {
-        
+
         CheckStateConditions();
     }
 
     public void OnExitState()
     {
-
+        
     }
 
     public void OnStateEnter()
     {
+        EnemyRef.NavAgent.enabled = false;
         Debug.Log("Enemy dead");
     }
 }

@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
     public bool Moving { get { return isMoving; } }
     private bool isDead = false;
     public bool Dead { get { return isDead; } }
-    private bool godMode = false;
+    private bool godMode = true;
     public bool GodMode { get { return godMode; } set { godMode = value; } }
     private bool isTargetable = true;
     public bool Targetable { get { return isTargetable; } set { isTargetable = value; } }
@@ -71,6 +71,7 @@ public class Player : MonoBehaviour
     private List<GameObject> m_pickupsNearby = new List<GameObject>();
     public List<GameObject> PickupsNearby { get {  return m_pickupsNearby; } }
     private IWeapon m_currentWeapon;
+    private string m_weaponType;
 
     private void Awake()
     {
@@ -101,7 +102,11 @@ public class Player : MonoBehaviour
 
         if(m_isShooting)
         {
-            m_currentWeapon.Attack();
+            if(m_currentWeapon.Attack() && m_weaponType.Equals("Melee"))
+            {
+                Animator.ResetTrigger("MeleeAttack");
+                Animator.SetTrigger("MeleeAttack");
+            }
         }
 
         m_stateMachine.CurrentState.OnExecuteState();
@@ -136,8 +141,6 @@ public class Player : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             m_isShooting = true;
-            Animator.ResetTrigger("MeleeAttack");
-            Animator.SetTrigger("MeleeAttack");
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
@@ -197,10 +200,11 @@ public class Player : MonoBehaviour
             m_currentWeapon = transform.AddComponent<Shotgun>() as IWeapon;
         }
 
-        m_currentWeapon.ProjectilePrefab = m_projectilePrefab;
+        m_weaponType = weaponData.type;
         m_currentWeapon.WeaponRoot = weaponPrefab;
         m_currentWeapon.RotationAngle = transform.rotation;
         m_currentWeapon.BulletTag = "Allied";
+        m_currentWeapon.BottomlessClip = false;
         m_currentWeapon.SetWeaponData(weaponData, currentAmmo);
     }
 

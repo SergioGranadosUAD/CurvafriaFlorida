@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 234223ebccbc3f6419b191906bb6eb71, type: 3}
   m_Name: MeleeEnemy
   m_EditorClassIdentifier: 
-  type: 
-  speed: 0
-  detectionRange: 0
+  type: Melee
+  speed: 4
+  detectionRange: 15
+  atkRange: 1.5
+  distanceRange: 1.4
   atkSpeed: 0

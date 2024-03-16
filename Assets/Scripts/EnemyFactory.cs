@@ -29,11 +29,11 @@ public class EnemyFactory : MonoBehaviour
         }
     }
 
-    public GameObject SpawnEnemy(GameObject prefab, Vector3 position, EnemyData enemyData, WeaponData weaponData)
+    public GameObject SpawnEnemy(GameObject prefab, Vector3 position, EnemyData enemyData, WeaponData weaponData, GameObject patrolPath)
     {
         GameObject newEnemy = Instantiate(prefab, position, Quaternion.identity);
         Enemy enemyRef = newEnemy.GetComponent<Enemy>();
-        enemyRef.SetEnemyData(enemyData);
+        enemyRef.SetEnemyData(enemyData, patrolPath);
         enemyRef.SetWeaponData(weaponData);
         m_enemyList.Add(newEnemy);
         

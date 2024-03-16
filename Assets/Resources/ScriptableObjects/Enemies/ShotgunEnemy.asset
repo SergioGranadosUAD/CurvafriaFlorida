@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: ShotgunEnemy
   m_EditorClassIdentifier: 
   type: Shotgun
-  speed: 0
-  detectionRange: 0
+  speed: 2
+  detectionRange: 10
+  atkRange: 9
+  distanceRange: 3
   atkSpeed: 0

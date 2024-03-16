@@ -42,7 +42,7 @@ public class EnemySpawner : MonoBehaviour
                 m_weaponData = Resources.Load<WeaponData>("ScriptableObjects/Weapons/Shotgun");
                 break;
         }
-        EnemyFactory.Instance.SpawnEnemy(m_enemyPrefab, transform.position, m_enemyData, m_weaponData);
+        EnemyFactory.Instance.SpawnEnemy(m_enemyPrefab, transform.position, m_enemyData, m_weaponData, patrolNodes);
 
         GameObject.Destroy(gameObject);
     }

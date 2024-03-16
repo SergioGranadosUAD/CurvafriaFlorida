@@ -20,6 +20,19 @@ public class ProjectileFactory : MonoBehaviour
         }
     }
 
+    private GameObject m_projectilePrefab;
+    public GameObject ProjectilePrefab
+    {
+        get
+        {
+            if(m_projectilePrefab == null)
+            {
+                m_projectilePrefab = Resources.Load<GameObject>("Prefabs/Projectile");
+            }
+            return m_projectilePrefab;
+        }
+    }
+
     public List<GameObject> m_projectileList;
     void Awake()
     {
@@ -29,9 +42,9 @@ public class ProjectileFactory : MonoBehaviour
         }
     }
 
-    public GameObject SpawnProjectile(GameObject prefab, Vector3 position, float speed, Quaternion rotation, string instanceTag)
+    public GameObject SpawnProjectile(Vector3 position, float speed, Quaternion rotation, string instanceTag)
     {
-        GameObject newProjectile = Instantiate(prefab, position, rotation);
+        GameObject newProjectile = Instantiate(ProjectilePrefab, position, rotation);
         Projectile projectileRef = newProjectile.GetComponent<Projectile>();
         projectileRef.SetProjectileData(speed, rotation, instanceTag);
         m_projectileList.Add(newProjectile);

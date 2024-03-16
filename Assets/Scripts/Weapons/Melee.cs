@@ -7,8 +7,6 @@ public class Melee : MonoBehaviour, IWeapon
     GameObject m_weaponRoot;
     GameObject m_spawnerLocation;
     public GameObject WeaponRoot { get { return m_weaponRoot; } set { m_weaponRoot = value; } }
-    GameObject m_projectilePrefab;
-    public GameObject ProjectilePrefab { get { return m_projectilePrefab; } set { m_projectilePrefab = value; } }
     Quaternion m_bulletRotation;
     public Quaternion RotationAngle { get { return m_bulletRotation; } set { m_bulletRotation = value; } }
     string m_bulletTag;
@@ -21,17 +19,23 @@ public class Melee : MonoBehaviour, IWeapon
     private bool m_canShoot = true;
     private float m_spreadAngle = 0;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //bool m_Started;
+    //public LayerMask m_LayerMask;
+    //
+    //void Start()
+    //{
+    //    //Use this to ensure that the Gizmos are being drawn when in Play Mode.
+    //    m_Started = true;
+    //}
+    //
+    //void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
+    //    if (m_Started)
+    //        //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
+    //        Gizmos.DrawWireCube(m_spawnerLocation.transform.position, Vector3.one);
+    //}
 
     public void SetWeaponData(WeaponData data, int currentAmmo)
     {
@@ -60,14 +64,34 @@ public class Melee : MonoBehaviour, IWeapon
         m_bulletCount = currentAmmo;
     }
 
-    public void Attack()
+    public bool Attack()
     {
         if (m_canShoot)
         {
-            //ProjectileFactory.Instance.SpawnProjectile(ProjectilePrefab, m_spawnerLocation.transform.position, 3000, spreadValue, BulletTag);
+            Collider[] hitColliders = Physics.OverlapBox(m_spawnerLocation.transform.position, Vector3.one, WeaponRoot.transform.rotation);
+            for(int i = 0;  i < hitColliders.Length; i++)
+            {
+                if(BulletTag.Equals("Allied") && hitColliders[i].CompareTag("Enemy"))
+                {
+                    Enemy enemyRef = hitColliders[i].GetComponent<Enemy>();
+                    if (enemyRef != null)
+                    {
+                        enemyRef.DamageEnemy();
+                    }
+                }
+                else if(BulletTag.Equals("Hostile") && hitColliders[i].CompareTag("Player"))
+                {
+                    Player playerRef = hitColliders[i].GetComponent<Player>();
+                    if(playerRef != null)
+                    {
+                        playerRef.DamagePlayer();
+                    }
+                }
+            }
             StartCoroutine(WaitForCooldown());
+            return true;
         }
-
+        return false;
     }
 
     private IEnumerator WaitForCooldown()

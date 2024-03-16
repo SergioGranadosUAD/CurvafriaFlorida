@@ -29,6 +29,7 @@ public class AI_PatrolState : IState
         }
     }
 
+    private float m_rotationSpeed = 3;
     private List<Vector3> m_patrolNodes = new List<Vector3>();
     private int m_currentNode = 0;
 
@@ -46,12 +47,24 @@ public class AI_PatrolState : IState
 
     public void OnExecuteState()
     {
-        if(Vector3.Distance(EnemyRef.Position, m_patrolNodes[m_currentNode]) > 0)
+
+
+        if(Vector3.Distance(EnemyRef.Position, m_patrolNodes[m_currentNode]) > 0.1f)
         {
             EnemyRef.NavAgent.destination = m_patrolNodes[m_currentNode];
         }else
         {
             m_currentNode++;
+            if(m_currentNode >  m_patrolNodes.Count -1)
+            {
+                m_currentNode = 0;
+            }
+        }
+
+        Vector3 lookToMovement = EnemyRef.NavAgent.velocity;
+        if (lookToMovement.sqrMagnitude > 0)
+        {
+            EnemyRef.transform.rotation = Quaternion.Slerp(EnemyRef.transform.rotation, Quaternion.LookRotation(lookToMovement), Time.deltaTime * m_rotationSpeed);
         }
 
         CheckStateConditions();

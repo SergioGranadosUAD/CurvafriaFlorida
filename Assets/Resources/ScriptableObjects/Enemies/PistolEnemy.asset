@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: PistolEnemy
   m_EditorClassIdentifier: 
   type: Pistol
-  speed: 0
-  detectionRange: 0
+  speed: 2
+  detectionRange: 12
+  atkRange: 10
+  distanceRange: 4
   atkSpeed: 0

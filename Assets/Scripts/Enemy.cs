@@ -7,15 +7,14 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private GameObject patrolPath;
+    
     [SerializeField] private float idleTimer = 15;
     [SerializeField] private GameObject weaponPrefab;
-    [SerializeField] private GameObject m_projectilePrefab;
-    [SerializeField] private WeaponData m_defaultWeapon;
 
     private StateMachine m_stateMachine = new StateMachine();
 
-    public GameObject PatrolPath {  get { return patrolPath; } }
+    private GameObject m_patrolPath;
+    public GameObject PatrolPath {  get { return m_patrolPath; } }
     private bool m_playerDetected = false;
     public bool PlayerDetected {  get { return m_playerDetected; } }
     public float IdleTimer { get { return idleTimer; } }
@@ -25,6 +24,10 @@ public class Enemy : MonoBehaviour
     public float Speed {  get { return m_speed; } }
     private float m_detectionRange = 10;
     public float DetectionRange {  get { return m_detectionRange; } }
+    private float m_minimumDistance = 0;
+    public float MinimumDistance {  get { return m_minimumDistance; } }
+    private float m_atkRange = 0;
+    public float AttackRange {  get {  return m_atkRange; } }
 
     private bool isMoving = false;
     public bool Moving { get { return isMoving; } }
@@ -69,29 +72,60 @@ public class Enemy : MonoBehaviour
         }
     }
     private IWeapon m_currentWeapon;
+    public IWeapon CurrentWeapon { get {  return m_currentWeapon; } }
 
     // Start is called before the first frame update
     void Start()
     {
-        SetupStateMachine();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         m_stateMachine.CurrentState.OnExecuteState();
-
-        if(!PlayerDetected && !Dead && GameManager.Instance.Player.Targetable)
+        if(!Dead)
         {
-            CheckPlayerDistance();
+            if (!PlayerDetected && GameManager.Instance.Player.Targetable)
+            {
+                CheckPlayerDistance();
+            }
+        }
+
+        if (NavAgent.desiredVelocity != Vector3.zero)
+        {
+            Animator.SetBool("IsMoving", true);
+            isMoving = true;
+        }
+        else
+        {
+            Animator.SetBool("IsMoving", false);
+            isMoving = false;
+        }
+
+        if (isMoving)
+        {
+            Vector2 rawMovementValue = new Vector2(NavAgent.desiredVelocity.x, NavAgent.desiredVelocity.z);
+            rawMovementValue.Normalize();
+            if (rawMovementValue != Vector2.zero)
+            {
+                Vector3 relativeDir = Quaternion.Euler(0f , 0f, transform.eulerAngles.y) * rawMovementValue;
+                Animator.SetFloat("dirX", relativeDir.x);
+                Animator.SetFloat("dirY", relativeDir.y);
+            }
         }
     }
 
-    public void SetEnemyData(EnemyData data)
+    public void SetEnemyData(EnemyData data, GameObject patrolPath)
     {
         m_type = data.type;
         NavAgent.speed = data.speed;
         m_detectionRange = data.detectionRange;
+        m_minimumDistance = data.distanceRange;
+        m_atkRange = data.atkRange;
+        m_patrolPath = patrolPath;
+
+        SetupStateMachine();
     }
 
     public void SetWeaponData(WeaponData weaponData)
@@ -118,10 +152,10 @@ public class Enemy : MonoBehaviour
             m_currentWeapon = transform.AddComponent<Shotgun>() as IWeapon;
         }
 
-        m_currentWeapon.ProjectilePrefab = m_projectilePrefab;
         m_currentWeapon.WeaponRoot = weaponPrefab;
         m_currentWeapon.RotationAngle = transform.rotation;
-        m_currentWeapon.BulletTag = "Enemy";
+        m_currentWeapon.BulletTag = "Hostile";
+        m_currentWeapon.BottomlessClip = true;
         m_currentWeapon.SetWeaponData(weaponData, weaponData.maxAmmo);
     }
 
@@ -151,7 +185,7 @@ public class Enemy : MonoBehaviour
         m_stateMachine.AddState(new AI_ChaseState(), "Chase");
         m_stateMachine.AddState(new AI_DeathState(), "Death");
 
-        if(patrolPath == null)
+        if(m_patrolPath == null)
         {
             m_stateMachine.ChangeState("Idle");
         }
