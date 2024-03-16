@@ -47,7 +47,7 @@ public class Rifle : MonoBehaviour, IWeapon
 
     public bool Attack()
     {
-        if(m_canShoot && m_bulletCount > 0)
+        if (m_canShoot && (m_bulletCount > 0 || BottomlessClip))
         {
             float angleX = WeaponRoot.transform.eulerAngles.x;
             float angleY = WeaponRoot.transform.eulerAngles.y;

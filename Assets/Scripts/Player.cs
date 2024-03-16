@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
     public bool Moving { get { return isMoving; } }
     private bool isDead = false;
     public bool Dead { get { return isDead; } }
-    private bool godMode = true;
+    private bool godMode = false;
     public bool GodMode { get { return godMode; } set { godMode = value; } }
     private bool isTargetable = true;
     public bool Targetable { get { return isTargetable; } set { isTargetable = value; } }
@@ -71,6 +71,7 @@ public class Player : MonoBehaviour
     private List<GameObject> m_pickupsNearby = new List<GameObject>();
     public List<GameObject> PickupsNearby { get {  return m_pickupsNearby; } }
     private IWeapon m_currentWeapon;
+    public IWeapon CurrentWeapon { get { return m_currentWeapon; } }
     private string m_weaponType;
 
     private void Awake()
@@ -171,7 +172,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void SwitchWeapon(WeaponData weaponData, int currentAmmo)
+    public void SwitchWeapon(WeaponData weaponData, int currentAmmo)
     {
         Debug.Log("Weapon loaded with: " + currentAmmo);
         if (m_currentWeapon != null)

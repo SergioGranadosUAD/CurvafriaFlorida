@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AI_DeathState : IState
+public class GM_PauseState : IState
 {
     private StateMachine m_stateController;
     public StateMachine StateController
@@ -16,16 +16,16 @@ public class AI_DeathState : IState
         get { return m_owner; }
         set { m_owner = value; }
     }
-    private Enemy m_enemyRef;
-    private Enemy EnemyRef
+    private GameManager m_gameManagerRef;
+    private GameManager GameManagerRef
     {
         get
         {
-            if (m_enemyRef == null)
+            if (m_gameManagerRef == null)
             {
-                m_enemyRef = m_owner.GetComponent<Enemy>();
+                m_gameManagerRef = m_owner.GetComponent<GameManager>();
             }
-            return m_enemyRef;
+            return m_gameManagerRef;
         }
     }
 
@@ -43,13 +43,11 @@ public class AI_DeathState : IState
 
     public void OnExitState()
     {
-        
+
     }
 
     public void OnStateEnter()
     {
-        EnemyRef.NavAgent.enabled = false;
-        EnemyFactory.Instance.RemoveEnemyFromList(Owner);
-        Debug.Log("Enemy dead");
+        
     }
 }

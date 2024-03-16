@@ -42,7 +42,7 @@ public class EnemyFactory : MonoBehaviour
         return newEnemy;
     }
 
-    private void RemoveEnemyFromList(GameObject enemy)
+    public void RemoveEnemyFromList(GameObject enemy)
     {
         m_enemyList.Remove(enemy);
     }
@@ -53,9 +53,9 @@ public class EnemyFactory : MonoBehaviour
         {
             foreach (GameObject enemy in m_enemyList)
             {
-                Destroy(enemy);
+                Enemy enemyRef = enemy.GetComponent<Enemy>();
+                enemyRef.DamageEnemy();
             }
-            m_enemyList.Clear();
         }
         
     }
