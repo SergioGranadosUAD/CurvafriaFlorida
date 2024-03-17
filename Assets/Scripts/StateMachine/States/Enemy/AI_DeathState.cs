@@ -49,6 +49,7 @@ public class AI_DeathState : IState
     public void OnStateEnter()
     {
         EnemyRef.NavAgent.enabled = false;
+        EnemyRef.EnableRagdoll(true);
         EnemyFactory.Instance.RemoveEnemyFromList(Owner);
         Debug.Log("Enemy dead");
     }

@@ -47,6 +47,18 @@ public class Enemy : MonoBehaviour
             return m_rigidBody;
         }
     }
+    private CapsuleCollider m_collider;
+    public CapsuleCollider Collider
+    {
+        get
+        {
+            if (m_collider == null)
+            {
+                m_collider = GetComponent<CapsuleCollider>();
+            }
+            return m_collider;
+        }
+    }
     private Animator m_animator;
     public Animator Animator
     {
@@ -77,7 +89,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        EnableRagdoll(false);
     }
 
     // Update is called once per frame
@@ -202,5 +214,23 @@ public class Enemy : MonoBehaviour
         {
             isDead = true;
         }
+    }
+
+    public void EnableRagdoll(bool enabled)
+    {
+        Rigidbody[] rbs = GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody rb in rbs)
+        {
+            rb.isKinematic = !enabled;
+        }
+        Collider[] cols = GetComponentsInChildren<Collider>();
+        foreach (Collider col in cols)
+        {
+            col.enabled = enabled;
+        }
+
+        Rigidbody.isKinematic = enabled;
+        Collider.enabled = !enabled;
+        Animator.enabled = !enabled;
     }
 }
