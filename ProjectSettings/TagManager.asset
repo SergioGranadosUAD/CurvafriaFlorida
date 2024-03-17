@@ -10,6 +10,8 @@ TagManager:
   - Hostile
   - Pickup
   - Enemy
+  - WinArea
+  - CMCamera
   layers:
   - Default
   - TransparentFX
@@ -17,8 +19,8 @@ TagManager:
   - Enemy
   - Water
   - UI
-  - 
-  - 
+  - Alive
+  - Dead
   - 
   - 
   - 
