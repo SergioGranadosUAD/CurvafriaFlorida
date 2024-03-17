@@ -50,6 +50,7 @@ public class AI_DeathState : IState
     {
         EnemyRef.NavAgent.enabled = false;
         EnemyRef.EnableRagdoll(true);
+        GameObject.Destroy(EnemyRef.WeaponPrefab);
         EnemyFactory.Instance.RemoveEnemyFromList(Owner);
         Debug.Log("Enemy dead");
     }

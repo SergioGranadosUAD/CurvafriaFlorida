@@ -45,7 +45,7 @@ public class PickupFactory : MonoBehaviour
     {
         GameObject newPickup = Instantiate(PickupAsset, position, Quaternion.identity);
         Pickup pickupRef = newPickup.GetComponent<Pickup>();
-        pickupRef.SetPickupType(data);
+        pickupRef.SetPickupType(data, bulletsLeft);
         m_pickupList.Add(newPickup);
         
         pickupRef.onPickupDestroyed += RemovePickupFromList;

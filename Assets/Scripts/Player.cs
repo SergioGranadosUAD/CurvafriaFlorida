@@ -55,6 +55,7 @@ public class Player : MonoBehaviour
         }
     }
     private StateMachine m_stateMachine = new StateMachine();
+    private WeaponData m_currentWeaponData;
 
     private bool isMoving = false;
     public bool Moving { get { return isMoving; } }
@@ -100,11 +101,13 @@ public class Player : MonoBehaviour
         IAPlayer.BasicMovement.Shoot.started += Shoot;
         IAPlayer.BasicMovement.Shoot.canceled += Shoot;
         IAPlayer.BasicMovement.Pickup.started += PickupItem;
+        IAPlayer.BasicMovement.Drop.started += DropWeapon;
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        m_currentWeaponData = m_defaultWeapon;
         EnableRagdoll(false);
         SwitchWeapon(m_defaultWeapon, m_defaultWeapon.maxAmmo);
     }
@@ -126,7 +129,7 @@ public class Player : MonoBehaviour
         m_stateMachine.CurrentState.OnExecuteState();
     }
 
-    public void Move(InputAction.CallbackContext context)
+    private void Move(InputAction.CallbackContext context)
     {
         if(context.phase == InputActionPhase.Started)
         {
@@ -150,7 +153,7 @@ public class Player : MonoBehaviour
         m_stateMachine.ChangeState("Idle");
     }
 
-    public void Shoot(InputAction.CallbackContext context)
+    private void Shoot(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
         {
@@ -164,24 +167,40 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void PickupItem(InputAction.CallbackContext context)
+    private void PickupItem(InputAction.CallbackContext context)
     {
         if(m_pickupsNearby.Count != 0)
         {
             GameObject closestObject = m_pickupsNearby[0];
-            foreach(GameObject pickup in  m_pickupsNearby)
+            if(closestObject != null)
             {
-                if(Vector3.Distance(closestObject.transform.position, transform.position) >
-                   Vector3.Distance(pickup.transform.position, transform.position))
+                foreach (GameObject pickup in m_pickupsNearby)
                 {
-                    closestObject = pickup;
+                    if (Vector3.Distance(closestObject.transform.position, transform.position) >
+                       Vector3.Distance(pickup.transform.position, transform.position))
+                    {
+                        closestObject = pickup;
+                    }
                 }
-            }
 
-            Pickup weaponRef = closestObject.GetComponent<Pickup>();
-            SwitchWeapon(weaponRef.WeaponData, weaponRef.CurrentAmmo);
-            m_pickupsNearby.Remove(closestObject);
-            GameObject.Destroy(closestObject);
+                Pickup weaponRef = closestObject.GetComponent<Pickup>();
+                SwitchWeapon(weaponRef.WeaponData, weaponRef.CurrentAmmo);
+                m_pickupsNearby.Remove(closestObject);
+                GameObject.Destroy(closestObject);
+            }
+        }
+    }
+
+    private void DropWeapon(InputAction.CallbackContext context)
+    {
+        if(!m_currentWeaponData.type.Equals("Melee"))
+        {
+            if(m_currentWeapon.BulletCount > 0)
+            {
+                PickupFactory.Instance.SpawnPickup(transform.position, m_currentWeaponData, m_currentWeapon.BulletCount);
+                Debug.Log("Weapon dropped with " + m_currentWeapon.BulletCount);
+            }
+            SwitchWeapon(m_defaultWeapon, m_defaultWeapon.maxAmmo);
         }
     }
 
@@ -219,6 +238,7 @@ public class Player : MonoBehaviour
         m_currentWeapon.RotationAngle = transform.rotation;
         m_currentWeapon.BulletTag = "Allied";
         m_currentWeapon.BottomlessClip = false;
+        m_currentWeaponData = weaponData;
         m_currentWeapon.SetWeaponData(weaponData, currentAmmo);
     }
 

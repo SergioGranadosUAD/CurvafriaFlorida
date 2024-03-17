@@ -22,7 +22,7 @@ public class Pickup : MonoBehaviour
     {
         if(m_weaponObject == null)
         {
-            SetPickupType(m_weaponData);
+            SetPickupType(m_weaponData, m_weaponData.maxAmmo);
         }
     }
 
@@ -56,10 +56,10 @@ public class Pickup : MonoBehaviour
         }
     }
 
-    public void SetPickupType(WeaponData data)
+    public void SetPickupType(WeaponData data, int bulletsLeft)
     {
         m_weaponData = data;
-        m_currentAmmo = m_weaponData.maxAmmo;
+        m_currentAmmo = bulletsLeft;
 
         m_weaponObject = GameObject.Instantiate(data.weapon);
         m_weaponObject.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);

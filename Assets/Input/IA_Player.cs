@@ -62,6 +62,15 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop"",
+                    ""type"": ""Button"",
+                    ""id"": ""75d53557-af2a-435c-b781-0d9607adc57e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -196,6 +205,28 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""action"": ""Pickup"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba0ff83e-a514-4aaa-b26e-c05be5d8d7dc"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d558ef73-e968-4bae-880a-1189aa38133e"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -208,6 +239,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_BasicMovement_Aim = m_BasicMovement.FindAction("Aim", throwIfNotFound: true);
         m_BasicMovement_Shoot = m_BasicMovement.FindAction("Shoot", throwIfNotFound: true);
         m_BasicMovement_Pickup = m_BasicMovement.FindAction("Pickup", throwIfNotFound: true);
+        m_BasicMovement_Drop = m_BasicMovement.FindAction("Drop", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -273,6 +305,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_BasicMovement_Aim;
     private readonly InputAction m_BasicMovement_Shoot;
     private readonly InputAction m_BasicMovement_Pickup;
+    private readonly InputAction m_BasicMovement_Drop;
     public struct BasicMovementActions
     {
         private @IA_Player m_Wrapper;
@@ -281,6 +314,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         public InputAction @Aim => m_Wrapper.m_BasicMovement_Aim;
         public InputAction @Shoot => m_Wrapper.m_BasicMovement_Shoot;
         public InputAction @Pickup => m_Wrapper.m_BasicMovement_Pickup;
+        public InputAction @Drop => m_Wrapper.m_BasicMovement_Drop;
         public InputActionMap Get() { return m_Wrapper.m_BasicMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -302,6 +336,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Pickup.started += instance.OnPickup;
             @Pickup.performed += instance.OnPickup;
             @Pickup.canceled += instance.OnPickup;
+            @Drop.started += instance.OnDrop;
+            @Drop.performed += instance.OnDrop;
+            @Drop.canceled += instance.OnDrop;
         }
 
         private void UnregisterCallbacks(IBasicMovementActions instance)
@@ -318,6 +355,9 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Pickup.started -= instance.OnPickup;
             @Pickup.performed -= instance.OnPickup;
             @Pickup.canceled -= instance.OnPickup;
+            @Drop.started -= instance.OnDrop;
+            @Drop.performed -= instance.OnDrop;
+            @Drop.canceled -= instance.OnDrop;
         }
 
         public void RemoveCallbacks(IBasicMovementActions instance)
@@ -341,5 +381,6 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         void OnAim(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
         void OnPickup(InputAction.CallbackContext context);
+        void OnDrop(InputAction.CallbackContext context);
     }
 }

@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     
     [SerializeField] private float idleTimer = 15;
     [SerializeField] private GameObject weaponPrefab;
+    public GameObject WeaponPrefab { get {  return weaponPrefab; } }
 
     private StateMachine m_stateMachine = new StateMachine();
 
@@ -85,6 +86,7 @@ public class Enemy : MonoBehaviour
     }
     private IWeapon m_currentWeapon;
     public IWeapon CurrentWeapon { get {  return m_currentWeapon; } }
+    private WeaponData m_weaponData;
 
     // Start is called before the first frame update
     void Start()
@@ -168,6 +170,7 @@ public class Enemy : MonoBehaviour
         m_currentWeapon.RotationAngle = transform.rotation;
         m_currentWeapon.BulletTag = "Hostile";
         m_currentWeapon.BottomlessClip = true;
+        m_weaponData = weaponData;
         m_currentWeapon.SetWeaponData(weaponData, weaponData.maxAmmo);
     }
 
@@ -213,6 +216,7 @@ public class Enemy : MonoBehaviour
         if(!Dead)
         {
             isDead = true;
+            PickupFactory.Instance.SpawnPickup(transform.position, m_weaponData, m_weaponData.maxAmmo);
         }
     }
 
