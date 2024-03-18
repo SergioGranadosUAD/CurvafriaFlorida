@@ -8,6 +8,11 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    public delegate void WeaponSwitched(string type);
+    public event WeaponSwitched OnWeaponSwitched;
+    public delegate void WeaponShot(int currentAmmo, int maxAmmo);
+    public event WeaponShot OnWeaponShot;
+
     //Variable declaration
     [SerializeField] private float playerSpeed = 500;
     [SerializeField] private float idleTimer = 15;
@@ -119,6 +124,7 @@ public class Player : MonoBehaviour
 
         if(m_isShooting)
         {
+            OnWeaponShot.Invoke(m_currentWeapon.BulletCount, m_currentWeaponData.maxAmmo);
             if(m_currentWeapon.Attack() && m_weaponType.Equals("Melee"))
             {
                 Animator.ResetTrigger("MeleeAttack");
@@ -240,6 +246,9 @@ public class Player : MonoBehaviour
         m_currentWeapon.BottomlessClip = false;
         m_currentWeaponData = weaponData;
         m_currentWeapon.SetWeaponData(weaponData, currentAmmo);
+
+        OnWeaponSwitched.Invoke(weaponData.type);
+        OnWeaponShot.Invoke(currentAmmo, weaponData.maxAmmo);
     }
 
     private void HandleAim()

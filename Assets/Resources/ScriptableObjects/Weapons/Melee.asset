@@ -18,5 +18,5 @@ MonoBehaviour:
   barrelPosition: {x: 0.25, y: 0.286, z: 0.278}
   type: Melee
   rateOfFire: 2
-  maxAmmo: 10
+  maxAmmo: 0
   spreadAngle: 0
