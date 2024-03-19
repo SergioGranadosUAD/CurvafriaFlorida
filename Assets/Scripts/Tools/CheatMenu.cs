@@ -25,45 +25,52 @@ public class CheatMenu : EditorWindow
 
     private void OnGUI()
     {
-        if (GameManager.Instance.Player == null)
+        if(GameManager.Instance != null)
         {
-            GUILayout.Label("Player couldn't be found.", EditorStyles.boldLabel);
+            if (GameManager.Instance.Player == null)
+            {
+                GUILayout.Label("Player couldn't be found.", EditorStyles.boldLabel);
+            }
+            else
+            {
+                SetInspectorValues();
+                GUILayout.Label("CHEAT LIST", EditorStyles.boldLabel);
+                godmode = GUILayout.Toggle(godmode, "Enable Godmode");
+                noTarget = GUILayout.Toggle(noTarget, "Is Targetable");
+                bottomlessClip = GUILayout.Toggle(bottomlessClip, "Enable Bottomless Clip");
+
+                if (GUI.changed)
+                {
+                    UpdatePlayer();
+                }
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("Give weapon to player", EditorStyles.boldLabel);
+                selectionIndex = EditorGUILayout.Popup(selectionIndex, weaponNames.ToArray());
+                if (GUILayout.Button("Give weapon"))
+                {
+                    SwitchPlayerWeapon();
+                }
+
+                GUILayout.Space(20);
+
+                if (GUILayout.Button("Kill all enemies"))
+                {
+                    ClearLevel();
+                }
+
+                GUILayout.Space(10);
+
+                if (GUILayout.Button("Restart Level"))
+                {
+                    RestartLevel();
+                }
+            }
         }
         else
         {
-            SetInspectorValues();
-            GUILayout.Label("CHEAT LIST", EditorStyles.boldLabel);
-            godmode = GUILayout.Toggle(godmode, "Enable Godmode");
-            noTarget = GUILayout.Toggle(noTarget, "Is Targetable");
-            bottomlessClip = GUILayout.Toggle(bottomlessClip, "Enable Bottomless Clip");
-
-            if(GUI.changed)
-            {
-                UpdatePlayer();
-            }
-
-            GUILayout.Space(10);
-
-            GUILayout.Label("Give weapon to player", EditorStyles.boldLabel);
-            selectionIndex = EditorGUILayout.Popup(selectionIndex, weaponNames.ToArray());
-            if (GUILayout.Button("Give weapon"))
-            {
-                SwitchPlayerWeapon();
-            }
-
-            GUILayout.Space(20);
-
-            if (GUILayout.Button("Kill all enemies"))
-            {
-                ClearLevel();
-            }
-
-            GUILayout.Space(10);
-
-            if (GUILayout.Button("Restart Level"))
-            {
-                RestartLevel();
-            }
+            GUILayout.Label("Current scene is not a gameplay scene.", EditorStyles.boldLabel);
         }
     }
 

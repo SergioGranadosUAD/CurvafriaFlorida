@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -101,5 +101,11 @@ public class GameManager : MonoBehaviour
         m_stateMachine.AddState(new GM_GameOverState(), "GameOver");
 
         m_stateMachine.ChangeState("SetupLevel");
+    }
+
+    public void RestartValues()
+    {
+        m_player = null;
+        m_playerRef = null;
     }
 }

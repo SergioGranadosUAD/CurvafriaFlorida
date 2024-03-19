@@ -99,8 +99,6 @@ public class Player : MonoBehaviour
         SetupStateMachine();
 
         Assert.IsNotNull<IA_Player>(IAPlayer);
-        //m_projectileSpawner = transform.Find("ProjectileSpawner").gameObject;
-
         //Subscribe local functions to events managed by Input Actions
         IAPlayer.BasicMovement.Enable();
         IAPlayer.UIMap.Enable();
@@ -116,7 +114,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -128,7 +126,11 @@ public class Player : MonoBehaviour
 
             if (m_isShooting)
             {
-                OnWeaponShot.Invoke(m_currentWeapon.BulletCount, m_currentWeaponData.maxAmmo);
+                if(OnWeaponShot != null)
+                {
+                    OnWeaponShot.Invoke(m_currentWeapon.BulletCount, m_currentWeaponData.maxAmmo);
+                }
+                
                 if (m_currentWeapon.Attack() && m_weaponType.Equals("Melee"))
                 {
                     Animator.ResetTrigger("MeleeAttack");
@@ -257,8 +259,14 @@ public class Player : MonoBehaviour
         m_currentWeaponData = weaponData;
         m_currentWeapon.SetWeaponData(weaponData, currentAmmo);
 
-        OnWeaponSwitched.Invoke(weaponData.type);
-        OnWeaponShot.Invoke(currentAmmo, weaponData.maxAmmo);
+        if(OnWeaponSwitched != null)
+        {
+            OnWeaponSwitched.Invoke(weaponData.type);
+        }
+        if(OnWeaponShot != null)
+        {
+            OnWeaponShot?.Invoke(currentAmmo, weaponData.maxAmmo);
+        }
     }
 
     private void HandleAim()

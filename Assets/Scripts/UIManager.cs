@@ -22,9 +22,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    [SerializeField] private GameObject m_hud;
-    [SerializeField] private GameObject m_pauseMenu;
-    [SerializeField] private GameObject m_deathScreen;
+    private GameObject m_hud;
+    private GameObject m_pauseMenu;
+    private GameObject m_deathScreen;
     [SerializeField] private List<Sprite> m_weaponSprites;
 
     private Image m_weaponImage;
@@ -86,6 +86,8 @@ public class UIManager : MonoBehaviour
     public void QuitGame()
     {
         SceneManager.LoadScene(0);
+        GameObject.Destroy(GameManager.Instance.gameObject);
+        GameObject.Destroy(UIManager.Instance.gameObject);
     }
 
     public void UnbindUIManagerFromPlayer()
@@ -95,6 +97,11 @@ public class UIManager : MonoBehaviour
     }
     public void SetupUIManager()
     {
+        GameObject uiRoot = GameObject.Find("UI");
+        m_hud = uiRoot.transform.GetChild(0).gameObject;
+        m_pauseMenu = uiRoot.transform.GetChild(1).gameObject;
+        m_deathScreen = uiRoot.transform.GetChild(2).gameObject;
+
         m_weaponImage = m_hud.transform.Find("WeaponIcon").GetComponent<Image>();
         m_ammoText = m_hud.transform.Find("AmmoCount").GetComponent<TMP_Text>();
 

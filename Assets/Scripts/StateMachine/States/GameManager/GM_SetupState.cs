@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -41,7 +42,13 @@ public class GM_SetupState : IState
 
     public void OnExecuteState()
     {
-
+        //Workaround, had to wait for Player to be destroyed before setting its values again.
+        if(!m_loaded)
+        {
+            UIManager.Instance.SetupUIManager();
+            GameManager.Instance.Player.SetupPlayer();
+            m_loaded = true;
+        }
         CheckStateConditions();
     }
 
@@ -52,21 +59,23 @@ public class GM_SetupState : IState
 
     public void OnStateEnter()
     {
+        m_loaded = false;
         GameManagerRef.RestartLevel = false;
         if(GameManagerRef.LevelFinished)
         {
             GameManagerRef.LevelFinished = false;
-            Scene newScene = SceneManager.GetSceneByBuildIndex(SceneManager.GetActiveScene().buildIndex + 1);
-            if (newScene != null)
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex + 1);
+            if (scenePath != "")
             {
                 {
-                    SceneManager.SetActiveScene(newScene);
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
                 }
             }
             else
             {
                 SceneManager.LoadScene(0);
                 GameObject.Destroy(GameManagerRef.gameObject);
+                GameObject.Destroy(UIManager.Instance.gameObject);
             }
         }
 
@@ -78,6 +87,7 @@ public class GM_SetupState : IState
         EnemyFactory.Instance.ClearAllEnemies();
         ProjectileFactory.Instance.ClearProjectileList();
         PickupFactory.Instance.ClearPickupList();
+        GameManagerRef.RestartValues();
 
         GameObject entitySpawnList = GameObject.FindGameObjectWithTag("Spawners");
         foreach(Transform gObject in entitySpawnList.transform)
@@ -88,9 +98,5 @@ public class GM_SetupState : IState
         }
 
         GameManagerRef.WinArea.SetActive(false);
-
-        UIManager.Instance.SetupUIManager();
-        GameManager.Instance.Player.SetupPlayer();
-        m_loaded = true;
     }
 }
