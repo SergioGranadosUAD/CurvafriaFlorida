@@ -30,12 +30,14 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Mientras el proyectil se encuentre activo, lo impulsa hacia adelante.
         if(m_projectileActive)
         {
             m_rigidBody.velocity = transform.forward * m_speed * Time.deltaTime;
 
             if (!m_renderer.isVisible)
             {
+                //Si ya no es visible, empieza un contador para destruirlo.
                 despawnTimer += Time.deltaTime;
                 if (despawnTimer >= timeToDespawn)
                 {
@@ -47,6 +49,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        //En caso de entrar en contacto con una entidad, verifica su afiliación y la daña si coincide.
         if(transform.CompareTag("Allied") && collision.transform.CompareTag("Enemy"))
         {
             Enemy enemyRef = collision.transform.GetComponent<Enemy>();
@@ -59,6 +62,7 @@ public class Projectile : MonoBehaviour
             playerRef.DamagePlayer();
             GameObject.Destroy(gameObject);
         }
+        //En caso de entrar en contacto con una pared destruye el proyectil.
         else if(collision.transform.CompareTag("Ground"))
         {
             GameObject.Destroy(gameObject);
@@ -77,12 +81,14 @@ public class Projectile : MonoBehaviour
         onProjectileDestroyed.Invoke(gameObject);
     }
 
+    //Pausa la actualización del proyectil.
     public void PauseProjectile()
     {
         m_projectileActive = false;
         m_rigidBody.velocity = Vector3.zero;
     }
 
+    //Resume la actualización del proyectil.
     public void ResumeProjectile()
     {
         m_projectileActive = true;

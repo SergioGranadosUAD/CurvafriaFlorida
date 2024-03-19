@@ -46,6 +46,7 @@ public class GM_PauseState : IState
 
     public void OnExitState()
     {
+        //Continua con la actualización de todos las entidades y oculta el menú.
         UIManager.Instance.ShowPauseMenu(false);
         EnemyFactory.Instance.ResumeEnemies();
         ProjectileFactory.Instance.ResumeProjectiles();
@@ -54,6 +55,7 @@ public class GM_PauseState : IState
 
     public void OnStateEnter()
     {
+        //Pausa la actualización de todas las entidades y muestra el menú.
         UIManager.Instance.ShowPauseMenu(true);
         EnemyFactory.Instance.PauseEnemies();
         ProjectileFactory.Instance.PauseProjectiles();

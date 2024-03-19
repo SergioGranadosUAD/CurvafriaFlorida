@@ -32,6 +32,7 @@ public class Pickup : MonoBehaviour
         
     }
 
+    //Si el jugador entra a la zona de colisión el objeto se añade a la lista de objetos cercanos.
     private void OnTriggerEnter(Collider collision)
     {
         if(collision.transform.CompareTag("Player"))
@@ -41,6 +42,7 @@ public class Pickup : MonoBehaviour
         }
     }
 
+    //En caso de que salga del area el objeto se elimina de la lista.
     private void OnTriggerExit(Collider collision)
     {
         if (collision.transform.CompareTag("Player"))

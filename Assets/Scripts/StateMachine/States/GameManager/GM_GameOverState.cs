@@ -41,6 +41,7 @@ public class GM_GameOverState : IState
 
     public void OnExecuteState()
     {
+        //Al presionar cualquier tecla se reinicia el nivel
         if(Keyboard.current.anyKey.isPressed)
         {
             GameManagerRef.RestartLevel = true;
@@ -51,11 +52,13 @@ public class GM_GameOverState : IState
 
     public void OnExitState()
     {
+        //Al salir oculta el menú.
         UIManager.Instance.ShowGameOverMenu(false);
     }
 
     public void OnStateEnter()
     {
+        //Al entrar muestra la pantalla de muerte y desactiva los controles del jugador.
         UIManager.Instance.ShowGameOverMenu(true);
         GameManager.Instance.Player.IAPlayer.BasicMovement.Disable();
     }

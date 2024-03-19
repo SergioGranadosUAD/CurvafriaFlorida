@@ -96,6 +96,7 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        //Inicializa la máquina de estados y suscribe las funciones necesarias al Input Actions.
         SetupStateMachine();
 
         Assert.IsNotNull<IA_Player>(IAPlayer);
@@ -120,10 +121,12 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Si no se encuentra pausado, actualiza al jugador.
         if(m_playerActive)
         {
             HandleAim();
 
+            //Revisa si el jugador puede disparar y actualiza la interfaz para reflejarlo.
             if (m_isShooting)
             {
                 if(OnWeaponShot != null)
@@ -142,6 +145,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Mueve al jugador.
     private void Move(InputAction.CallbackContext context)
     {
         if(context.phase == InputActionPhase.Started)
@@ -156,6 +160,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Inicializa la máquina de estados.
     private void SetupStateMachine()
     {
         m_stateMachine.Owner = gameObject;
@@ -166,11 +171,13 @@ public class Player : MonoBehaviour
         m_stateMachine.ChangeState("Idle");
     }
 
+    //Pausa el juego.
     private void PauseGame(InputAction.CallbackContext context)
     {
         GameManager.Instance.Paused = !GameManager.Instance.Paused;
     }
 
+    //Señala al arma actual que se intente disparar.
     private void Shoot(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
@@ -185,6 +192,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Recoje un pickup del suelo.
     private void PickupItem(InputAction.CallbackContext context)
     {
         if(m_pickupsNearby.Count != 0)
@@ -209,6 +217,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Tira el arma actual si es diferente al cuchillo.
     private void DropWeapon(InputAction.CallbackContext context)
     {
         if(!m_currentWeaponData.type.Equals("Melee"))
@@ -222,6 +231,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Cambia el arma actual por una nueva al recogerla.
     public void SwitchWeapon(WeaponData weaponData, int currentAmmo)
     {
         Debug.Log("Weapon loaded with: " + currentAmmo);
@@ -269,6 +279,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Rota al jugador dependiendo de la posición del mouse.
     private void HandleAim()
     {
         Vector3 mousePos = IAPlayer.BasicMovement.Aim.ReadValue<Vector2>();
@@ -284,6 +295,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Mata al jugador si no está en modo dios.
     public void DamagePlayer()
     {
         if(!Dead && !GodMode)
@@ -292,6 +304,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Activa el modo ragdoll al morir.
     public void EnableRagdoll(bool enabled)
     {
         Rigidbody[] rbs = GetComponentsInChildren<Rigidbody>();
@@ -310,12 +323,15 @@ public class Player : MonoBehaviour
         Animator.enabled = !enabled;
     }
 
+    //Inicializa al jugador al iniciar el nivel.
     public void SetupPlayer()
     {
         m_currentWeaponData = m_defaultWeapon;
         EnableRagdoll(false);
         SwitchWeapon(m_defaultWeapon, m_defaultWeapon.maxAmmo);
     }
+
+    //Pausa la actualización del jugador.
     public void PausePlayer()
     {
         m_playerActive = false;
@@ -328,6 +344,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Continua con la actualización del jugador.
     public void ResumePlayer()
     {
         m_playerActive = true;

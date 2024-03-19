@@ -25,8 +25,10 @@ public class CheatMenu : EditorWindow
 
     private void OnGUI()
     {
+        //Si no hay una instancia del game manager activa, no se encuentra en una escena de gameplay.
         if(GameManager.Instance != null)
         {
+            //En caso de no haber jugador, todavía no se instancia.
             if (GameManager.Instance.Player == null)
             {
                 GUILayout.Label("Player couldn't be found.", EditorStyles.boldLabel);
@@ -74,6 +76,7 @@ public class CheatMenu : EditorWindow
         }
     }
 
+    //Le asigna un arma nueva al jugador.
     private void SwitchPlayerWeapon()
     {
         WeaponData data;
@@ -98,6 +101,7 @@ public class CheatMenu : EditorWindow
         GameManager.Instance.Player.SwitchWeapon(data, data.maxAmmo);
     }
 
+    //Actualiza las variables del jugador al haber alguna actualización.
     private void UpdatePlayer()
     {
         GameManager.Instance.Player.GodMode = godmode;
@@ -105,16 +109,19 @@ public class CheatMenu : EditorWindow
         GameManager.Instance.Player.CurrentWeapon.BottomlessClip = bottomlessClip;
     }
 
+    //Mata a todos los enemigos de la escena.
     private void ClearLevel()
     {
         EnemyFactory.Instance.ClearEnemyList();
     }
 
+    //Reinicia el nivel.
     private void RestartLevel()
     {
         GameManager.Instance.RestartLevel = true;
     }
 
+    //Inicializa los valores default del menú.
     private void SetInspectorValues()
     {
         if(!updated)

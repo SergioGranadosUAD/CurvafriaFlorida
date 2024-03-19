@@ -52,6 +52,7 @@ public class GM_GameplayState : IState
 
     public void OnExecuteState()
     {
+        //Activa el área de victoria si todos los enemigos están muertos.
         if(EnemyFactory.Instance.GetEnemyCount() == 0) 
         {
             if(!GameManagerRef.WinArea.activeSelf)

@@ -99,9 +99,11 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Si el enemigo no se encuentra pausado, se actualiza de forma normal.
         if(m_EnemyActive)
         {
             m_stateMachine.CurrentState.OnExecuteState();
+            //Revisa la distancia del jugador y si ha sido detectado.
             if (!Dead)
             {
                 if (!PlayerDetected && GameManager.Instance.Player.Targetable)
@@ -110,6 +112,7 @@ public class Enemy : MonoBehaviour
                 }
             }
 
+            //Mueve al jugador y ajusta las animaciones para reflejarlo.
             if (NavAgent.desiredVelocity != Vector3.zero)
             {
                 Animator.SetBool("IsMoving", true);
@@ -135,6 +138,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    //Obtiene la información del enemigo actual y se la asigna.
     public void SetEnemyData(EnemyData data, GameObject patrolPath)
     {
         m_type = data.type;
@@ -147,6 +151,7 @@ public class Enemy : MonoBehaviour
         SetupStateMachine();
     }
 
+    //Le asigna la información al arma actual.
     public void SetWeaponData(WeaponData weaponData)
     {
         if (m_currentWeapon != null)
@@ -179,6 +184,7 @@ public class Enemy : MonoBehaviour
         m_currentWeapon.SetWeaponData(weaponData, weaponData.maxAmmo);
     }
 
+    //Revisa si el jugador se encuentra a la distancia mínima y si no hay obstáculos en su campo de visión.
     private void CheckPlayerDistance()
     {
         Vector3 playerPos = GameManager.Instance.Player.transform.position;
@@ -197,6 +203,8 @@ public class Enemy : MonoBehaviour
                 
         }
     }
+
+    //Inicializa la máquina de estados.
     private void SetupStateMachine()
     {
         m_stateMachine.Owner = gameObject;
@@ -216,6 +224,7 @@ public class Enemy : MonoBehaviour
         
     }
 
+    //Mata al enemigo y suelta su arma.
     public void DamageEnemy()
     {
         if(!Dead)
@@ -225,6 +234,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    //Activa el modo ragdoll al morir.
     public void EnableRagdoll(bool enabled)
     {
         Rigidbody[] rbs = GetComponentsInChildren<Rigidbody>();
@@ -243,6 +253,7 @@ public class Enemy : MonoBehaviour
         Animator.enabled = !enabled;
     }
 
+    //Pausa la actualización del enemigo.
     public void PauseEnemy()
     {
         m_EnemyActive = false;
@@ -255,6 +266,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    //Continua con la actualización del enemigo.
     public void ResumeEnemy()
     {
         m_EnemyActive = true;
