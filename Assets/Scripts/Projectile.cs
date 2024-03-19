@@ -9,7 +9,7 @@ public class Projectile : MonoBehaviour
     public event OnProjectileDestroyed onProjectileDestroyed;
    
 
-    private float m_speed = 5f;
+    private float m_speed = 3f;
     private Rigidbody m_rigidBody;
     private MeshRenderer m_renderer;
 

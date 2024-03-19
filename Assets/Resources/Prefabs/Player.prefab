@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf4b995b9085b647a35a4680a4bd47a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 1000
+  playerSpeed: 350
   idleTimer: 15
   weaponPrefab: {fileID: 4740042104019863359}
   m_projectilePrefab: {fileID: 3516576234044140275, guid: 0b86dde989e0e8b419d8efe05e0c1196, type: 3}
