@@ -17,6 +17,8 @@ public class Projectile : MonoBehaviour
 
     private float timeToDespawn = 3;
 
+    private bool m_projectileActive = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,14 +30,17 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_rigidBody.velocity = transform.forward * m_speed * Time.deltaTime;
-
-        if(!m_renderer.isVisible)
+        if(m_projectileActive)
         {
-            despawnTimer += Time.deltaTime;
-            if (despawnTimer >= timeToDespawn)
+            m_rigidBody.velocity = transform.forward * m_speed * Time.deltaTime;
+
+            if (!m_renderer.isVisible)
             {
-                GameObject.Destroy(gameObject);
+                despawnTimer += Time.deltaTime;
+                if (despawnTimer >= timeToDespawn)
+                {
+                    GameObject.Destroy(gameObject);
+                }
             }
         }
     }
@@ -70,5 +75,16 @@ public class Projectile : MonoBehaviour
     private void OnDestroy()
     {
         onProjectileDestroyed.Invoke(gameObject);
+    }
+
+    public void PauseProjectile()
+    {
+        m_projectileActive = false;
+        m_rigidBody.velocity = Vector3.zero;
+    }
+
+    public void ResumeProjectile()
+    {
+        m_projectileActive = true;
     }
 }

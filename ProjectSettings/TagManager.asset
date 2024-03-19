@@ -12,6 +12,7 @@ TagManager:
   - Enemy
   - WinArea
   - CMCamera
+  - Spawners
   layers:
   - Default
   - TransparentFX

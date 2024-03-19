@@ -9,7 +9,7 @@ enum EnemyType
     RIFLE,
     SHOTGUN
 }
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : MonoBehaviour, ISpawner
 {
     [SerializeField] private EnemyType enemyType = EnemyType.MELEE;
     [SerializeField] private GameObject patrolNodes;
@@ -19,7 +19,18 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        switch(enemyType)
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void SpawnEntity()
+    {
+        switch (enemyType)
         {
             case EnemyType.MELEE:
                 m_enemyPrefab = Resources.Load<GameObject>("Prefabs/Enemies/EnemyHoodedBandit");
@@ -43,13 +54,5 @@ public class EnemySpawner : MonoBehaviour
                 break;
         }
         EnemyFactory.Instance.SpawnEnemy(m_enemyPrefab, transform.position, m_enemyData, m_weaponData, patrolNodes);
-
-        GameObject.Destroy(gameObject);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

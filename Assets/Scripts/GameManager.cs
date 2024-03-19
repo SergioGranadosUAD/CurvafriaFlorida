@@ -66,6 +66,8 @@ public class GameManager : MonoBehaviour
     public int LevelIndex {  get {  return m_currentLevelIndex; } set { m_currentLevelIndex = value; } }
     private bool m_isPaused = false;
     public bool Paused { get {  return m_isPaused; } set { m_isPaused = value; } }
+    private bool m_quitGame = false;
+    public bool QuitGame { get { return m_quitGame; } set { m_quitGame = value; } }
     private bool m_levelFinished = false;
     public bool LevelFinished { get { return m_levelFinished; } set { m_levelFinished = value; } }
     private bool m_restartLevel = false;

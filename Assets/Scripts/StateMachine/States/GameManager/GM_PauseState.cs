@@ -32,7 +32,10 @@ public class GM_PauseState : IState
 
     public void CheckStateConditions()
     {
-
+        if(!GameManagerRef.Paused)
+        {
+            StateController.ChangeState("Gameplay");
+        }
     }
 
     public void OnExecuteState()
@@ -43,11 +46,17 @@ public class GM_PauseState : IState
 
     public void OnExitState()
     {
-        Time.timeScale = 1.0f;
+        UIManager.Instance.ShowPauseMenu(false);
+        EnemyFactory.Instance.ResumeEnemies();
+        ProjectileFactory.Instance.ResumeProjectiles();
+        GameManagerRef.Player.ResumePlayer();
     }
 
     public void OnStateEnter()
     {
-        Time.timeScale = 0f;
+        UIManager.Instance.ShowPauseMenu(true);
+        EnemyFactory.Instance.PauseEnemies();
+        ProjectileFactory.Instance.PauseProjectiles();
+        GameManagerRef.Player.PausePlayer();
     }
 }

@@ -88,6 +88,8 @@ public class Enemy : MonoBehaviour
     public IWeapon CurrentWeapon { get {  return m_currentWeapon; } }
     private WeaponData m_weaponData;
 
+    private bool m_EnemyActive = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -97,35 +99,38 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_stateMachine.CurrentState.OnExecuteState();
-        if(!Dead)
+        if(m_EnemyActive)
         {
-            if (!PlayerDetected && GameManager.Instance.Player.Targetable)
+            m_stateMachine.CurrentState.OnExecuteState();
+            if (!Dead)
             {
-                CheckPlayerDistance();
+                if (!PlayerDetected && GameManager.Instance.Player.Targetable)
+                {
+                    CheckPlayerDistance();
+                }
             }
-        }
 
-        if (NavAgent.desiredVelocity != Vector3.zero)
-        {
-            Animator.SetBool("IsMoving", true);
-            isMoving = true;
-        }
-        else
-        {
-            Animator.SetBool("IsMoving", false);
-            isMoving = false;
-        }
-
-        if (isMoving)
-        {
-            Vector2 rawMovementValue = new Vector2(NavAgent.desiredVelocity.x, NavAgent.desiredVelocity.z);
-            rawMovementValue.Normalize();
-            if (rawMovementValue != Vector2.zero)
+            if (NavAgent.desiredVelocity != Vector3.zero)
             {
-                Vector3 relativeDir = Quaternion.Euler(0f , 0f, transform.eulerAngles.y) * rawMovementValue;
-                Animator.SetFloat("dirX", relativeDir.x);
-                Animator.SetFloat("dirY", relativeDir.y);
+                Animator.SetBool("IsMoving", true);
+                isMoving = true;
+            }
+            else
+            {
+                Animator.SetBool("IsMoving", false);
+                isMoving = false;
+            }
+
+            if (isMoving)
+            {
+                Vector2 rawMovementValue = new Vector2(NavAgent.desiredVelocity.x, NavAgent.desiredVelocity.z);
+                rawMovementValue.Normalize();
+                if (rawMovementValue != Vector2.zero)
+                {
+                    Vector3 relativeDir = Quaternion.Euler(0f, 0f, transform.eulerAngles.y) * rawMovementValue;
+                    Animator.SetFloat("dirX", relativeDir.x);
+                    Animator.SetFloat("dirY", relativeDir.y);
+                }
             }
         }
     }
@@ -236,5 +241,27 @@ public class Enemy : MonoBehaviour
         Rigidbody.isKinematic = enabled;
         Collider.enabled = !enabled;
         Animator.enabled = !enabled;
+    }
+
+    public void PauseEnemy()
+    {
+        m_EnemyActive = false;
+        Rigidbody.velocity = Vector3.zero;
+        Rigidbody.angularVelocity = Vector3.zero;
+        if (!Dead)
+        {
+            Animator.speed = 0f;
+            NavAgent.enabled = false;
+        }
+    }
+
+    public void ResumeEnemy()
+    {
+        m_EnemyActive = true;
+        if (!Dead)
+        {
+            Animator.speed = 1.0f;
+            NavAgent.enabled = true;
+        }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -31,11 +32,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_weaponImage = m_hud.transform.Find("WeaponIcon").GetComponent<Image>();
-        m_ammoText = m_hud.transform.Find("AmmoCount").GetComponent<TMP_Text>();
-
-        GameManager.Instance.Player.OnWeaponSwitched += UpdateWeaponSprite;
-        GameManager.Instance.Player.OnWeaponShot += UpdateAmmoText;
+        
     }
 
     // Update is called once per frame
@@ -69,5 +66,39 @@ public class UIManager : MonoBehaviour
     public void UpdateAmmoText(int currentAmmo, int maxAmmo)
     {
         m_ammoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
+    }
+
+    public void ShowPauseMenu(bool active)
+    {
+        m_pauseMenu.SetActive(active);
+    }
+
+    public void ShowGameOverMenu(bool active)
+    {
+        m_deathScreen.SetActive(active);
+    }
+
+    public void ResumeGame()
+    {
+        GameManager.Instance.Paused = false;
+    }
+
+    public void QuitGame()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void UnbindUIManagerFromPlayer()
+    {
+        GameManager.Instance.Player.OnWeaponSwitched -= UpdateWeaponSprite;
+        GameManager.Instance.Player.OnWeaponShot -= UpdateAmmoText;
+    }
+    public void SetupUIManager()
+    {
+        m_weaponImage = m_hud.transform.Find("WeaponIcon").GetComponent<Image>();
+        m_ammoText = m_hud.transform.Find("AmmoCount").GetComponent<TMP_Text>();
+
+        GameManager.Instance.Player.OnWeaponSwitched += UpdateWeaponSprite;
+        GameManager.Instance.Player.OnWeaponShot += UpdateAmmoText;
     }
 }

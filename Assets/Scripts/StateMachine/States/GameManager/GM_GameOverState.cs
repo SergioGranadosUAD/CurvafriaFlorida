@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GM_GameOverState : IState
 {
@@ -32,22 +33,30 @@ public class GM_GameOverState : IState
 
     public void CheckStateConditions()
     {
-
+        if(GameManagerRef.RestartLevel)
+        {
+            StateController.ChangeState("SetupLevel");
+        }
     }
 
     public void OnExecuteState()
     {
+        if(Keyboard.current.anyKey.isPressed)
+        {
+            GameManagerRef.RestartLevel = true;
+        }
 
         CheckStateConditions();
     }
 
     public void OnExitState()
     {
-
+        UIManager.Instance.ShowGameOverMenu(false);
     }
 
     public void OnStateEnter()
     {
-        
+        UIManager.Instance.ShowGameOverMenu(true);
+        GameManager.Instance.Player.IAPlayer.BasicMovement.Disable();
     }
 }

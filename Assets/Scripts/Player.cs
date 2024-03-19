@@ -92,6 +92,8 @@ public class Player : MonoBehaviour
     public IWeapon CurrentWeapon { get { return m_currentWeapon; } }
     private string m_weaponType;
 
+    private bool m_playerActive = true;
+
     private void Awake()
     {
         SetupStateMachine();
@@ -101,38 +103,41 @@ public class Player : MonoBehaviour
 
         //Subscribe local functions to events managed by Input Actions
         IAPlayer.BasicMovement.Enable();
+        IAPlayer.UIMap.Enable();
         IAPlayer.BasicMovement.Move.started += Move;
         IAPlayer.BasicMovement.Move.canceled += Move;
         IAPlayer.BasicMovement.Shoot.started += Shoot;
         IAPlayer.BasicMovement.Shoot.canceled += Shoot;
         IAPlayer.BasicMovement.Pickup.started += PickupItem;
         IAPlayer.BasicMovement.Drop.started += DropWeapon;
+        IAPlayer.UIMap.Pause.started += PauseGame;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        m_currentWeaponData = m_defaultWeapon;
-        EnableRagdoll(false);
-        SwitchWeapon(m_defaultWeapon, m_defaultWeapon.maxAmmo);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        HandleAim();
-
-        if(m_isShooting)
+        if(m_playerActive)
         {
-            OnWeaponShot.Invoke(m_currentWeapon.BulletCount, m_currentWeaponData.maxAmmo);
-            if(m_currentWeapon.Attack() && m_weaponType.Equals("Melee"))
-            {
-                Animator.ResetTrigger("MeleeAttack");
-                Animator.SetTrigger("MeleeAttack");
-            }
-        }
+            HandleAim();
 
-        m_stateMachine.CurrentState.OnExecuteState();
+            if (m_isShooting)
+            {
+                OnWeaponShot.Invoke(m_currentWeapon.BulletCount, m_currentWeaponData.maxAmmo);
+                if (m_currentWeapon.Attack() && m_weaponType.Equals("Melee"))
+                {
+                    Animator.ResetTrigger("MeleeAttack");
+                    Animator.SetTrigger("MeleeAttack");
+                }
+            }
+
+            m_stateMachine.CurrentState.OnExecuteState();
+        }
     }
 
     private void Move(InputAction.CallbackContext context)
@@ -157,6 +162,11 @@ public class Player : MonoBehaviour
         m_stateMachine.AddState(new DeathState(), "Death");
 
         m_stateMachine.ChangeState("Idle");
+    }
+
+    private void PauseGame(InputAction.CallbackContext context)
+    {
+        GameManager.Instance.Paused = !GameManager.Instance.Paused;
     }
 
     private void Shoot(InputAction.CallbackContext context)
@@ -290,5 +300,33 @@ public class Player : MonoBehaviour
         Rigidbody.isKinematic = enabled;
         Collider.enabled = !enabled;
         Animator.enabled = !enabled;
+    }
+
+    public void SetupPlayer()
+    {
+        m_currentWeaponData = m_defaultWeapon;
+        EnableRagdoll(false);
+        SwitchWeapon(m_defaultWeapon, m_defaultWeapon.maxAmmo);
+    }
+    public void PausePlayer()
+    {
+        m_playerActive = false;
+        Rigidbody.velocity = Vector3.zero;
+        Rigidbody.angularVelocity = Vector3.zero;
+        IAPlayer.BasicMovement.Disable();
+        if (!Dead)
+        {
+            Animator.speed = 0f;
+        }
+    }
+
+    public void ResumePlayer()
+    {
+        m_playerActive = true;
+        IAPlayer.BasicMovement.Enable();
+        if (!Dead)
+        {
+            Animator.speed = 1.0f;
+        }
     }
 }

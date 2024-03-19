@@ -9,12 +9,23 @@ enum PickupType
     RIFLE,
     SHOTGUN
 }
-public class PickupSpawner : MonoBehaviour
+public class PickupSpawner : MonoBehaviour, ISpawner
 {
     [SerializeField] private PickupType pickupType = PickupType.PISTOL;
     private WeaponData m_pickupData;
     // Start is called before the first frame update
     void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void SpawnEntity()
     {
         switch (pickupType)
         {
@@ -32,12 +43,5 @@ public class PickupSpawner : MonoBehaviour
                 break;
         }
         PickupFactory.Instance.SpawnPickup(transform.position, m_pickupData, m_pickupData.maxAmmo);
-        Destroy(gameObject);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

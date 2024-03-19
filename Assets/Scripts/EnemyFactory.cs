@@ -20,12 +20,17 @@ public class EnemyFactory : MonoBehaviour
         }
     }
 
-    public List<GameObject> m_enemyList;
+    public List<GameObject> m_aliveEnemyList;
+    public List<GameObject> m_deadEnemyList;
     void Awake()
     {
-        if (m_enemyList == null)
+        if (m_aliveEnemyList == null)
         {
-            m_enemyList = new List<GameObject>();
+            m_aliveEnemyList = new List<GameObject>();
+        }
+        if(m_deadEnemyList == null)
+        {
+            m_deadEnemyList = new List<GameObject>();
         }
     }
 
@@ -35,7 +40,7 @@ public class EnemyFactory : MonoBehaviour
         Enemy enemyRef = newEnemy.GetComponent<Enemy>();
         enemyRef.SetEnemyData(enemyData, patrolPath);
         enemyRef.SetWeaponData(weaponData);
-        m_enemyList.Add(newEnemy);
+        m_aliveEnemyList.Add(newEnemy);
         
         //projectileRef.onEnemyKilled += RemoveEnemyFromList;
         
@@ -44,14 +49,15 @@ public class EnemyFactory : MonoBehaviour
 
     public void RemoveEnemyFromList(GameObject enemy)
     {
-        m_enemyList.Remove(enemy);
+        m_deadEnemyList.Add(enemy);
+        m_aliveEnemyList.Remove(enemy);
     }
 
     public void ClearEnemyList()
     {
-        if(m_enemyList.Count > 0)
+        if(m_aliveEnemyList.Count > 0)
         {
-            foreach (GameObject enemy in m_enemyList)
+            foreach (GameObject enemy in m_aliveEnemyList)
             {
                 Enemy enemyRef = enemy.GetComponent<Enemy>();
                 enemyRef.DamageEnemy();
@@ -62,6 +68,38 @@ public class EnemyFactory : MonoBehaviour
 
     public int GetEnemyCount()
     {
-        return m_enemyList.Count;
+        return m_aliveEnemyList.Count;
+    }
+
+    public void PauseEnemies()
+    {
+        foreach(GameObject enemy in m_aliveEnemyList)
+        {
+            Enemy enemyRef = enemy.GetComponent<Enemy>();
+            enemyRef.PauseEnemy();
+        }
+    }
+
+    public void ResumeEnemies()
+    {
+        foreach (GameObject enemy in m_aliveEnemyList)
+        {
+            Enemy enemyRef = enemy.GetComponent<Enemy>();
+            enemyRef.ResumeEnemy();
+        }
+    }
+
+    public void ClearAllEnemies()
+    {
+        foreach(GameObject enemy in m_aliveEnemyList)
+        {
+            GameObject.Destroy(enemy);
+        }
+        foreach(GameObject enemy in m_deadEnemyList)
+        {
+            GameObject.Destroy(enemy);
+        }
+        m_aliveEnemyList.Clear();
+        m_deadEnemyList.Clear();
     }
 }

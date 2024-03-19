@@ -34,7 +34,11 @@ public class GM_GameplayState : IState
     {
         if(GameManagerRef.RestartLevel)
         {
-            StateController.ChangeState("LoadLevel");
+            StateController.ChangeState("SetupLevel");
+        }
+        if(GameManagerRef.Player.Dead)
+        {
+            StateController.ChangeState("GameOver");
         }
         if(GameManagerRef.Paused)
         {
@@ -42,8 +46,7 @@ public class GM_GameplayState : IState
         }
         if(GameManagerRef.LevelFinished)
         {
-            Debug.Log("Level finished");
-            //StateController.ChangeState("LoadLevel");
+            StateController.ChangeState("SetupLevel");
         }
     }
 

@@ -70,4 +70,22 @@ public class ProjectileFactory : MonoBehaviour
             m_projectileList.Clear();
         }
     }
+
+    public void PauseProjectiles()
+    {
+        foreach (GameObject projectile in m_projectileList)
+        {
+            Projectile projectileRef = projectile.GetComponent<Projectile>();
+            projectileRef.PauseProjectile();
+        }
+    }
+
+    public void ResumeProjectiles()
+    {
+        foreach (GameObject projectile in m_projectileList)
+        {
+            Projectile projectileRef = projectile.GetComponent<Projectile>();
+            projectileRef.ResumeProjectile();
+        }
+    }
 }
