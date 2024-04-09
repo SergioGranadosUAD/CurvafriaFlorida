@@ -46,6 +46,7 @@ public class DeathState : IState
 
     public void OnStateEnter()
     {
+        PlayerRef.AudioSource.PlayOneShot(AudioManager.Instance.GetRandomDeathSound());
         PlayerRef.IAPlayer.Disable();
         PlayerRef.EnableRagdoll(true);
     }

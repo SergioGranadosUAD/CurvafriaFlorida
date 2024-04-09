@@ -8,6 +8,9 @@ public class WeaponData : ScriptableObject
     [Tooltip("El modelo del arma.")]
     public GameObject weapon;
 
+    [Tooltip("El sonido de disparo del arma.")]
+    public AudioClip shotSound;
+
     [Tooltip("Posición del arma respecto a la mano.")]
     public Vector3 gripPosition;
 

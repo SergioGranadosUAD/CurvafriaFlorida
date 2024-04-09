@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Melee
   m_EditorClassIdentifier: 
   weapon: {fileID: 919132149155446097, guid: 69c3ab95836e8fd49bad2385512c8b37, type: 3}
+  shotSound: {fileID: 8300000, guid: 6ff827fcb98c0f8418ebafd623612d30, type: 3}
   gripPosition: {x: -0.1702, y: 0.1182, z: 0.0143}
   gripRotation: {x: 354.40775, y: 260.09515, z: 323.86398}
   barrelPosition: {x: 0.25, y: 0.286, z: 0.278}

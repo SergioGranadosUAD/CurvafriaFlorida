@@ -6,6 +6,8 @@ public class Melee : MonoBehaviour, IWeapon
 {
     GameObject m_weaponRoot;
     GameObject m_spawnerLocation;
+    private AudioSource m_shotSound;
+    private AudioClip m_shotSoundClip;
     public GameObject WeaponRoot { get { return m_weaponRoot; } set { m_weaponRoot = value; } }
     Quaternion m_bulletRotation;
     public Quaternion RotationAngle { get { return m_bulletRotation; } set { m_bulletRotation = value; } }
@@ -62,12 +64,17 @@ public class Melee : MonoBehaviour, IWeapon
         m_spawnerLocation = WeaponRoot.transform.Find("ProjectileSpawner").gameObject;
         m_shotCooldown = 1 / data.rateOfFire;
         m_bulletCount = currentAmmo;
+
+        m_shotSound = m_spawnerLocation.transform.Find("WeaponSound").GetComponent<AudioSource>();
+
+        m_shotSoundClip = data.shotSound;
     }
 
     public bool Attack()
     {
         if (m_canShoot)
         {
+            m_shotSound.PlayOneShot(m_shotSoundClip);
             Collider[] hitColliders = Physics.OverlapBox(m_spawnerLocation.transform.position, Vector3.one, WeaponRoot.transform.rotation);
             for(int i = 0;  i < hitColliders.Length; i++)
             {

@@ -48,6 +48,7 @@ public class AI_DeathState : IState
 
     public void OnStateEnter()
     {
+        EnemyRef.AudioSource.PlayOneShot(AudioManager.Instance.GetRandomDeathSound());
         EnemyRef.NavAgent.enabled = false;
         EnemyRef.EnableRagdoll(true);
         GameObject.Destroy(EnemyRef.WeaponPrefab);

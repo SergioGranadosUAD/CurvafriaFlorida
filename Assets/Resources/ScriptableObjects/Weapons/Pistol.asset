@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: 
   weapon: {fileID: 919132149155446097, guid: 966faf171360c82478497bcbee0a4a42, type: 3}
+  shotSound: {fileID: 8300000, guid: cbb97f4e324f9df49ac1f6d5efdc8550, type: 3}
   gripPosition: {x: -0.025, y: 0.151, z: 0.032}
   gripRotation: {x: 282.7036, y: 21.833641, z: 69.32513}
   barrelPosition: {x: -0.001, y: 0.058, z: 0.111}

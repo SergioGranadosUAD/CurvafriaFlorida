@@ -35,6 +35,18 @@ public class Player : MonoBehaviour
             return m_rigidBody;
         }
     }
+    private AudioSource m_audioSource;
+    public AudioSource AudioSource
+    {
+        get
+        {
+            if(m_audioSource == null)
+            {
+                m_audioSource = GetComponent<AudioSource>();
+            }
+            return m_audioSource;
+        }
+    }
     private CapsuleCollider m_collider;
     public CapsuleCollider Collider
     {
